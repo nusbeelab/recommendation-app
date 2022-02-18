@@ -1,0 +1,45 @@
+{{ block title }}
+    Binary choice question
+{{ endblock }}
+{{ block content }}
+
+    <form>
+        <input type="radio" id="optionA">
+        <label for="optionA" id="optionA-label"></label>
+        <input type="radio" id="optionB">
+        <label for="optionB" id="optionB-label"></label>
+        <button type="button" onclick="submitChoice()">Submit</button>
+    </form>
+
+    <script>
+        const optionA = document.getElementById("optionA");
+        const optionB = document.getElementById("optionB");
+        const optionALable = document.getElementById("optionA-label");
+        const optionBLable = document.getElementById("optionB-label");
+
+        function liveRecv(data) {
+            if (data.is_finished) {
+                document.getElementById("form").submit();
+            } else {
+                optionALable.innerHTML = data.optionA;
+                optionBLable.innerHTML = data.optionB;
+            }
+        }
+
+        function submitChoice() {
+            if (optionA.checked) {
+                liveSend({response: 0})
+                optionA.checked = false;
+            } else if (optionB.checked) {
+                liveSend({response: 1})
+                optionB.checked = false;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            liveSend({});
+        })
+
+    </script>
+
+{{ endblock }}
