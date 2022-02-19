@@ -1,4 +1,3 @@
-from typing import List
 from otree.api import (
     models,
     BaseConstants,
@@ -52,6 +51,7 @@ class Trial(ExtraModel):
     response = (
         models.BooleanField()
     )  # False (0) corresponds to optionA, True (1) corresponds to optionB
+    time_spent_ms = models.IntegerField()
 
 
 # HELPER FUNCTIONS
@@ -80,6 +80,7 @@ def live_method(player: Player, data: dict):
     if data:
         trial = get_current_trial(player)
         trial.response = data.get("response")
+        trial.time_spent_ms = int(data.get("time_spent_ms"))
         player.num_completed += 1
 
     if is_finished(player):
@@ -113,6 +114,7 @@ def custom_export(players):
         "optionA",
         "optionB",
         "response",
+        "time_spent_ms",
     ]
     for p in players:
         participant = p.participant
@@ -124,4 +126,5 @@ def custom_export(players):
                 trial.optionA,
                 trial.optionB,
                 trial.response,
+                trial.time_spent_ms,
             ]

@@ -3,19 +3,34 @@
 {{ endblock }}
 {{ block content }}
 
-    <form>
-        <input type="radio" id="optionA">
-        <label for="optionA" id="optionA-label"></label>
-        <input type="radio" id="optionB">
-        <label for="optionB" id="optionB-label"></label>
+    <div id="loading">...loading</div>
+    <div id="question" style="display: none;">
+        <div>
+            <input type="radio" id="optionA">
+            <label for="optionA" id="optionA-label"></label>
+            <input type="radio" id="optionB">
+            <label for="optionB" id="optionB-label"></label>
+        </div>
         <button type="button" onclick="submitChoice()">Submit</button>
-    </form>
-
+    </div>
+    
     <script>
+        let time_spent_ms_start;
+        const loading = document.getElementById("loading");
+        const question = document.getElementById("question");
         const optionA = document.getElementById("optionA");
         const optionB = document.getElementById("optionB");
         const optionALable = document.getElementById("optionA-label");
         const optionBLable = document.getElementById("optionB-label");
+
+        function sendResponse(response) {
+            loading.style.display = "block";
+            question.style.display = "none";
+            liveSend({
+                response, 
+                time_spent_ms: performance.now() - time_spent_ms_start
+            })
+        }
 
         function liveRecv(data) {
             if (data.is_finished) {
@@ -23,15 +38,18 @@
             } else {
                 optionALable.innerHTML = data.optionA;
                 optionBLable.innerHTML = data.optionB;
+                time_spent_ms_start = performance.now();
+                question.style.display = "block";
+                loading.style.display = "none";
             }
         }
 
         function submitChoice() {
             if (optionA.checked) {
-                liveSend({response: 0})
+                sendResponse(0);
                 optionA.checked = false;
             } else if (optionB.checked) {
-                liveSend({response: 1})
+                sendResponse(1);
                 optionB.checked = false;
             }
         }
