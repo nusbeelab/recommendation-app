@@ -1,5 +1,11 @@
 # recommendation-project
 
+## Usage
+
+### Export data
+
+To export experimental data with all the information needed for the project, visit https://nus-recommendation-project.herokuapp.com/export and locate the line with the phrase "custom export". Then click on the hyperlinks located on the same line to download the data, either as an excel file ("Excel") or a csv file ("Plain").
+
 ## Local development
 
 ### Prerequisites
