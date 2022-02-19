@@ -3,19 +3,34 @@
 {{ endblock }}
 {{ block content }}
 
-    <form>
-        <input type="radio" id="optionA">
-        <label for="optionA" id="optionA-label"></label>
-        <input type="radio" id="optionB">
-        <label for="optionB" id="optionB-label"></label>
+    <div id="loading">...loading</div>
+    <div id="question" style="display: none;">
+        <div>
+            <input type="radio" id="optionA">
+            <label for="optionA" id="optionA-label"></label>
+            <input type="radio" id="optionB">
+            <label for="optionB" id="optionB-label"></label>
+        </div>
         <button type="button" onclick="submitChoice()">Submit</button>
-    </form>
-
+    </div>
+    
     <script>
+        const loading = document.getElementById("loading");
+        const question = document.getElementById("question");
         const optionA = document.getElementById("optionA");
         const optionB = document.getElementById("optionB");
         const optionALable = document.getElementById("optionA-label");
         const optionBLable = document.getElementById("optionB-label");
+
+        function displayLoading() {
+            loading.style.display = "block";
+            question.style.display = "none";
+        }
+
+        function displayQuestion() {
+            question.style.display = "block";
+            loading.style.display = "none";
+        }
 
         function liveRecv(data) {
             if (data.is_finished) {
@@ -23,14 +38,17 @@
             } else {
                 optionALable.innerHTML = data.optionA;
                 optionBLable.innerHTML = data.optionB;
+                displayQuestion();
             }
         }
 
         function submitChoice() {
             if (optionA.checked) {
+                displayLoading();
                 liveSend({response: 0})
                 optionA.checked = false;
             } else if (optionB.checked) {
+                displayLoading();
                 liveSend({response: 1})
                 optionB.checked = false;
             }
