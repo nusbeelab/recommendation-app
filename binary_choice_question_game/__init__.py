@@ -12,7 +12,7 @@ from otree.api import (
 from binary_choice_question_game.utils import (
     read_qns,
     shuffle_new_list,
-    timestamp2datetime,
+    timestamp2utcdatetime,
     try_else_none,
 )
 
@@ -107,8 +107,8 @@ def custom_export(players):
         "optionA",
         "optionB",
         "response",
-        "start_time",
-        "end_time",
+        "utc_start_time",
+        "utc_end_time",
         "time_spent_ms",
     ]
     for p in players:
@@ -121,8 +121,8 @@ def custom_export(players):
                 trial.optionA,
                 trial.optionB,
                 trial.response,
-                timestamp2datetime(trial.start_timestamp_ms),
-                timestamp2datetime(trial.end_timestamp_ms),
+                timestamp2utcdatetime(trial.start_timestamp_ms),
+                timestamp2utcdatetime(trial.end_timestamp_ms),
                 try_else_none(
                     lambda: trial.end_timestamp_ms - trial.start_timestamp_ms
                 ),
