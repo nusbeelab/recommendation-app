@@ -1,3 +1,4 @@
+import os
 from otree.api import (
     models,
     BaseConstants,
@@ -7,28 +8,24 @@ from otree.api import (
     ExtraModel,
     Page,
 )
-from random import shuffle
-import os
+
+from binary_choice_question_game.utils import (
+    read_qns,
+    shuffle_new_list,
+    timestamp2datetime,
+    try_else_none,
+)
 
 doc = """
 Binary choice questions
 """
 
 
-def read_qns():
-    return [
-        tuple(row.split())
-        for row in open(
-            os.path.join(__name__, "binary_choice_questions.txt"), "r"
-        )
-    ]
-
-
 class C(BaseConstants):
     NAME_IN_URL = "NoR"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    QUESTIONS = read_qns()
+    QUESTIONS = read_qns(os.path.join(__name__, "binary_choice_questions.txt"))
     NUM_TRIALS = len(QUESTIONS)
 
 
@@ -51,16 +48,11 @@ class Trial(ExtraModel):
     response = (
         models.BooleanField()
     )  # False (0) corresponds to optionA, True (1) corresponds to optionB
-    time_spent_ms = models.IntegerField()
+    start_timestamp_ms = models.IntegerField()
+    end_timestamp_ms = models.IntegerField()
 
 
 # HELPER FUNCTIONS
-def get_shuffled_questions():
-    questions = C.QUESTIONS.copy()
-    shuffle(questions)
-    return questions
-
-
 def get_current_trial(player: Player):
     return Trial.filter(player=player, response=None)[0]
 
@@ -72,7 +64,7 @@ def is_finished(player: Player):
 # FUNCTIONS
 def creating_session(subsession: Subsession):
     for player in subsession.get_players():
-        for qn in get_shuffled_questions():
+        for qn in shuffle_new_list(C.QUESTIONS):
             Trial.create(player=player, optionA=qn[0], optionB=qn[1])
 
 
@@ -80,7 +72,8 @@ def live_method(player: Player, data: dict):
     if data:
         trial = get_current_trial(player)
         trial.response = data.get("response")
-        trial.time_spent_ms = int(data.get("time_spent_ms"))
+        trial.start_timestamp_ms = data.get("start_timestamp_ms")
+        trial.end_timestamp_ms = data.get("end_timestamp_ms")
         player.num_completed += 1
 
     if is_finished(player):
@@ -114,6 +107,8 @@ def custom_export(players):
         "optionA",
         "optionB",
         "response",
+        "start_time",
+        "end_time",
         "time_spent_ms",
     ]
     for p in players:
@@ -126,5 +121,9 @@ def custom_export(players):
                 trial.optionA,
                 trial.optionB,
                 trial.response,
-                trial.time_spent_ms,
+                timestamp2datetime(trial.start_timestamp_ms),
+                timestamp2datetime(trial.end_timestamp_ms),
+                try_else_none(
+                    lambda: trial.end_timestamp_ms - trial.start_timestamp_ms
+                ),
             ]
