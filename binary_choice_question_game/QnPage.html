@@ -15,7 +15,7 @@
     </div>
     
     <script>
-        let time_spent_ms_start;
+        let start_timestamp_ms, end_timestamp_ms;
         const loading = document.getElementById("loading");
         const question = document.getElementById("question");
         const optionA = document.getElementById("optionA");
@@ -24,11 +24,13 @@
         const optionBLable = document.getElementById("optionB-label");
 
         function sendResponse(response) {
+            end_timestamp_ms = Date.now();
             loading.style.display = "block";
             question.style.display = "none";
             liveSend({
                 response, 
-                time_spent_ms: performance.now() - time_spent_ms_start
+                start_timestamp_ms,
+                end_timestamp_ms
             })
         }
 
@@ -38,7 +40,7 @@
             } else {
                 optionALable.innerHTML = data.optionA;
                 optionBLable.innerHTML = data.optionB;
-                time_spent_ms_start = performance.now();
+                start_timestamp_ms = Date.now();
                 question.style.display = "block";
                 loading.style.display = "none";
             }
