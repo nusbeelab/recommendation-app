@@ -23,7 +23,7 @@ def try_else_none(success: Callable[[Any], T]) -> Union[T, None]:
         return None
 
 
-def timestamp2datetime(timestamp_ms: Union[int, None]):
+def timestamp2utcdatetime(timestamp_ms: Union[int, None]):
     return try_else_none(
-        lambda: datetime.fromtimestamp(round(timestamp_ms / 1000))
+        lambda: datetime.utcfromtimestamp(round(timestamp_ms / 1000))
     )

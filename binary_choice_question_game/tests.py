@@ -1,7 +1,10 @@
 from datetime import datetime
 import unittest
 
-from binary_choice_question_game.utils import timestamp2datetime, try_else_none
+from binary_choice_question_game.utils import (
+    timestamp2utcdatetime,
+    try_else_none,
+)
 
 
 class TestMain(unittest.TestCase):
@@ -25,11 +28,12 @@ class TestUtils(unittest.TestCase):
 
     def test_timestamp2datetime_success(self):
         self.assertEqual(
-            timestamp2datetime(1645345997672), datetime(2022, 2, 20, 15, 33, 18)
+            timestamp2utcdatetime(1645345997672),
+            datetime(2022, 2, 20, 8, 33, 18),
         )
 
     def test_timestamp2datetime_failure(self):
-        self.assertIsNone(timestamp2datetime(None))
+        self.assertIsNone(timestamp2utcdatetime(None))
 
 
 if __name__ == "__main__":
