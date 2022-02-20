@@ -1,4 +1,5 @@
 import os
+from random import random
 from otree.api import (
     models,
     BaseConstants,
@@ -65,7 +66,8 @@ def is_finished(player: Player):
 def creating_session(subsession: Subsession):
     for player in subsession.get_players():
         for qn in shuffle_new_list(C.QUESTIONS):
-            Trial.create(player=player, optionA=qn[0], optionB=qn[1])
+            optionA, optionB = qn if random() < 0.5 else qn[::-1]
+            Trial.create(player=player, optionA=optionA, optionB=optionB)
 
 
 def live_method(player: Player, data: dict):
@@ -99,6 +101,7 @@ class Results(Page):
 page_sequence = [QnPage, Results]
 
 
+# DATA EXPORT
 def custom_export(players):
     # header row
     yield [
