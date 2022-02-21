@@ -1,13 +1,9 @@
 from datetime import datetime
 from random import shuffle
-from typing import Any, Callable, List, Tuple, TypeVar, Union
+from typing import Any, Callable, List, TypeVar, Union
 
 
 T = TypeVar("T")
-
-
-def read_qns(filepath: str) -> List[Tuple[str, str]]:
-    return [tuple(row.split()) for row in open(filepath, "r")]
 
 
 def shuffle_new_list(lst: List[T]) -> List[T]:
