@@ -2,7 +2,20 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-        name="recommendations",
+        name="R",
+        display_name="Randomized Treatments",
+        num_demo_participants=1,
+        app_sequence=["binary_choice_game"],
+    ),
+    dict(
+        name="NoR",
+        display_name="No Recommendations",
+        num_demo_participants=1,
+        app_sequence=["binary_choice_game"],
+    ),
+    dict(
+        name="R_Random",
+        display_name="Random Recommendations",
         num_demo_participants=1,
         app_sequence=["binary_choice_game"],
     ),

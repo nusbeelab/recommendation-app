@@ -9,8 +9,11 @@ from binary_choice_game.utils import (
 
 
 def creating_session(subsession: Subsession):
+    treatment = subsession.session.config.get("name")
     for player in subsession.get_players():
-        player.treatment = random.choice(C.TREATMENTS).name
+        player.treatment = (
+            random.choice(C.TREATMENTS).name if treatment == "R" else treatment
+        )
         for qn in shuffle_new_list(C.QUESTIONS):
             optionA, optionB = qn if random.random() < 0.5 else qn[::-1]
             Trial.create(player=player, optionA=optionA, optionB=optionB)

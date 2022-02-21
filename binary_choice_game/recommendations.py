@@ -33,7 +33,7 @@ RECOMMENDER_HASHMAP = {
 }
 
 
-def get_recommender(treatment: RecOption) -> Recommender:
+def get_recommender(treatment: str) -> Recommender:
     return RECOMMENDER_HASHMAP.get(
-        treatment, RECOMMENDER_HASHMAP[RecOption.NONE]
+        RecOption(treatment), RECOMMENDER_HASHMAP[RecOption.NoR]
     )

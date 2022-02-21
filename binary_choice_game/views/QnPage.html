@@ -91,9 +91,9 @@
             } else {
                 optionALable.innerHTML = data.optionA;
                 optionBLable.innerHTML = data.optionB;
-                if (data.rec) {
+                if (data.rec === true) {
                     show(optionBRec);
-                } else {
+                } else if (data.rec === false) {
                     show(optionARec);
                 }
                 start_timestamp_ms = Date.now();
