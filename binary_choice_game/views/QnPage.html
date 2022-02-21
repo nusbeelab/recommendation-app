@@ -4,25 +4,52 @@
 {{ block content }}
 
     <div id="loading">...loading</div>
-    <div id="content" style="display: none;">
-        <div>
-            <div id="optionA">
-                <input type="radio" id="optionA-input">
-                <label for="optionA-input"></label>
-                <div class="rec" style="display: none;">
-                    This option is recommended for you
+    <div id="content" style="display: none">
+        <div id="qn-container">
+            <div id="options">
+                <div id="optionA" class="option">
+                    <input type="radio" id="optionA-input">
+                    <label for="optionA-input"></label>
+                    <div class="rec" style="display: none;">
+                        This option is recommended for you
+                    </div>
+                </div>
+                <div id="optionB" class="option">
+                    <input type="radio" id="optionB-input">
+                    <label for="optionB-input"></label>
+                    <div class="rec" style="display: none;">
+                        This option is recommended for you
+                    </div>
                 </div>
             </div>
-            <div id="optionB">
-                <input type="radio" id="optionB-input">
-                <label for="optionB-input"></label>
-                <div class="rec" style="display: none;">
-                    This option is recommended for you
-                </div>
-            </div>
+            <button type="button" onclick="submitChoice()">Submit</button>
         </div>
-        <button type="button" onclick="submitChoice()">Submit</button>
     </div>
+
+    
+    <style>
+        #qn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #options {
+            display: flex;
+            padding-bottom: 1rem;
+        }
+        
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20rem;
+        }
+
+        .rec {
+            text-align: center;
+        }
+    </style>
     
     <script>
         let start_timestamp_ms, end_timestamp_ms;
@@ -36,15 +63,15 @@
         const optionBLable = optionB.querySelector("label");
         const optionARec = optionA.querySelector(".rec")
         const optionBRec = optionB.querySelector(".rec");
-
+    
         function show(elem) {
             elem.style.display = "block";
         }
-
+    
         function hide(elem) {
             elem.style.display = "none";
         }
-
+    
         function sendResponse(response) {
             end_timestamp_ms = Date.now();
             show(loading);
@@ -57,7 +84,7 @@
                 end_timestamp_ms
             })
         }
-
+    
         function liveRecv(data) {
             if (data.is_finished) {
                 document.getElementById("form").submit();
@@ -74,7 +101,7 @@
                 hide(loading);
             }
         }
-
+    
         function submitChoice() {
             if (optionAInput.checked) {
                 sendResponse(0);
@@ -84,11 +111,11 @@
                 optionBInput.checked = false;
             }
         }
-
+    
         document.addEventListener("DOMContentLoaded", function() {
             liveSend({});
         })
-
+    
     </script>
 
 {{ endblock }}
