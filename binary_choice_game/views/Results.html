@@ -1,0 +1,30 @@
+{{ block title }}
+    Results
+{{ endblock }}
+
+{{ block content }}
+    <table class="table">
+        <tr>
+            <th>treatment</th>
+            <th>optionA</th>
+            <th>optionB</th>
+            <th>recommendation</th>
+            <th>response</th>
+            <th>utc_start_time</th>
+            <th>utc_end_time</th>
+            <th>time_spent_ms</th>
+        </tr>
+        {{ for t in trials }}
+            <tr>
+                <td>{{ player.treatment }}</td>
+                <td>{{ t.optionA }}</td>
+                <td>{{ t.optionB }}</td>
+                <td>{{ t.rec }}</td>
+                <td>{{ t.response }}</td>
+                <td>{{ t.utc_start_time }}</td>
+                <td>{{ t.utc_end_time }}</td>
+                <td>{{ t.time_spent_ms }}</td>
+            </tr>
+        {{ endfor }}
+    </table>
+{{ endblock }}
