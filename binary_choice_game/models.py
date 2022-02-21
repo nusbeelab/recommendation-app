@@ -24,6 +24,7 @@ class Trial(ExtraModel):
     player = models.Link(Player)
     optionA = models.StringField()
     optionB = models.StringField()
+    rec = models.BooleanField()
     response = (
         models.BooleanField()
     )  # False (0) corresponds to optionA, True (1) corresponds to optionB

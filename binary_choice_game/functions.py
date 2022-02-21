@@ -1,6 +1,6 @@
 import random
 from binary_choice_game import C
-from binary_choice_game.models import Player, Subsession, Trial
+from binary_choice_game.models import Subsession, Trial
 from binary_choice_game.utils import (
     shuffle_new_list,
     timestamp2utcdatetime,
@@ -24,6 +24,7 @@ def custom_export(players):
         "treatment",
         "optionA",
         "optionB",
+        "recommendation",
         "response",
         "utc_start_time",
         "utc_end_time",
@@ -39,6 +40,7 @@ def custom_export(players):
                 p.treatment,
                 trial.optionA,
                 trial.optionB,
+                trial.rec,
                 trial.response,
                 timestamp2utcdatetime(trial.start_timestamp_ms),
                 timestamp2utcdatetime(trial.end_timestamp_ms),

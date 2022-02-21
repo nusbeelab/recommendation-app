@@ -4,6 +4,7 @@ from otree.api import Page
 from otree.common import get_app_label_from_import_path
 
 from binary_choice_game.recommendations import get_recommender
+from binary_choice_game.utils import timestamp2utcdatetime, try_else_none
 
 
 class CustomPage(Page):
@@ -47,13 +48,15 @@ class QnPage(CustomPage):
             return {player.id_in_group: dict(is_finished=True)}
 
         trial = get_current_trial(player)
+        if not trial.rec:
+            trial.rec = get_recommender(player.treatment).rec(
+                player, (trial.optionA, trial.optionB)
+            )
         return {
             player.id_in_group: dict(
                 optionA=trial.optionA,
                 optionB=trial.optionB,
-                rec=get_recommender(player.treatment).rec(
-                    player, (trial.optionA, trial.optionB)
-                ),
+                rec=trial.rec,
             )
         }
 
@@ -61,7 +64,19 @@ class QnPage(CustomPage):
 class Results(CustomPage):
     @staticmethod
     def vars_for_template(player: Player):
-        return dict(trials=Trial.filter(player=player))
+        trials = Trial.filter(player=player)
+        trials = [
+            dict(
+                **trial.__dict__,
+                utc_start_time=timestamp2utcdatetime(trial.start_timestamp_ms),
+                utc_end_time=timestamp2utcdatetime(trial.end_timestamp_ms),
+                time_spent_ms=try_else_none(
+                    lambda: trial.end_timestamp_ms - trial.start_timestamp_ms
+                )
+            )
+            for trial in trials
+        ]
+        return dict(trials=trials)
 
 
 page_sequence = [StartPage, QnPage, Results]
