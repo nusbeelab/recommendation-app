@@ -3,6 +3,8 @@ from binary_choice_game.models import Player, Trial
 from otree.api import Page
 from otree.common import get_app_label_from_import_path
 
+from binary_choice_game.recommendations import get_recommender
+
 
 class CustomPage(Page):
     def get_template_name(self):
@@ -47,7 +49,11 @@ class QnPage(CustomPage):
         trial = get_current_trial(player)
         return {
             player.id_in_group: dict(
-                optionA=trial.optionA, optionB=trial.optionB
+                optionA=trial.optionA,
+                optionB=trial.optionB,
+                rec=get_recommender(player.treatment).rec(
+                    player, (trial.optionA, trial.optionB)
+                ),
             )
         }
 

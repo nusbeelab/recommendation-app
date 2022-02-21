@@ -6,10 +6,20 @@
     <div id="loading">...loading</div>
     <div id="question" style="display: none;">
         <div>
-            <input type="radio" id="optionA">
-            <label for="optionA" id="optionA-label"></label>
-            <input type="radio" id="optionB">
-            <label for="optionB" id="optionB-label"></label>
+            <div>
+                <input type="radio" id="optionA">
+                <label for="optionA" id="optionA-label"></label>
+                <div id="optionA-rec" style="display: none;">
+                    This option is recommended for you
+                </div>
+            </div>
+            <div>
+                <input type="radio" id="optionB">
+                <label for="optionB" id="optionB-label"></label>
+                <div id="optionB-rec" style="display: none;">
+                    This option is recommended for you
+                </div>
+            </div>
         </div>
         <button type="button" onclick="submitChoice()">Submit</button>
     </div>
@@ -22,11 +32,15 @@
         const optionB = document.getElementById("optionB");
         const optionALable = document.getElementById("optionA-label");
         const optionBLable = document.getElementById("optionB-label");
+        const optionARec = document.getElementById("optionA-rec");
+        const optionBRec = document.getElementById("optionB-rec");
 
         function sendResponse(response) {
             end_timestamp_ms = Date.now();
             loading.style.display = "block";
             question.style.display = "none";
+            optionARec.style.display = "none";
+            optionBRec.style.display = "none";
             liveSend({
                 response, 
                 start_timestamp_ms,
@@ -40,6 +54,12 @@
             } else {
                 optionALable.innerHTML = data.optionA;
                 optionBLable.innerHTML = data.optionB;
+                if (data.rec) {
+                    optionBRec.style.display = "block";
+                } else {
+                    optionARec.style.display = "block";
+                }
+                
                 start_timestamp_ms = Date.now();
                 question.style.display = "block";
                 loading.style.display = "none";
