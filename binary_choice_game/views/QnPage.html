@@ -4,19 +4,19 @@
 {{ block content }}
 
     <div id="loading">...loading</div>
-    <div id="question" style="display: none;">
+    <div id="content" style="display: none;">
         <div>
-            <div>
-                <input type="radio" id="optionA">
-                <label for="optionA" id="optionA-label"></label>
-                <div id="optionA-rec" style="display: none;">
+            <div id="optionA">
+                <input type="radio" id="optionA-input">
+                <label for="optionA-input"></label>
+                <div class="rec" style="display: none;">
                     This option is recommended for you
                 </div>
             </div>
-            <div>
-                <input type="radio" id="optionB">
-                <label for="optionB" id="optionB-label"></label>
-                <div id="optionB-rec" style="display: none;">
+            <div id="optionB">
+                <input type="radio" id="optionB-input">
+                <label for="optionB-input"></label>
+                <div class="rec" style="display: none;">
                     This option is recommended for you
                 </div>
             </div>
@@ -27,20 +27,30 @@
     <script>
         let start_timestamp_ms, end_timestamp_ms;
         const loading = document.getElementById("loading");
-        const question = document.getElementById("question");
+        const content = document.getElementById("content");
         const optionA = document.getElementById("optionA");
         const optionB = document.getElementById("optionB");
-        const optionALable = document.getElementById("optionA-label");
-        const optionBLable = document.getElementById("optionB-label");
-        const optionARec = document.getElementById("optionA-rec");
-        const optionBRec = document.getElementById("optionB-rec");
+        const optionAInput = document.getElementById("optionA-input");
+        const optionBInput = document.getElementById("optionB-input");
+        const optionALable = optionA.querySelector("label");
+        const optionBLable = optionB.querySelector("label");
+        const optionARec = optionA.querySelector(".rec")
+        const optionBRec = optionB.querySelector(".rec");
+
+        function show(elem) {
+            elem.style.display = "block";
+        }
+
+        function hide(elem) {
+            elem.style.display = "none";
+        }
 
         function sendResponse(response) {
             end_timestamp_ms = Date.now();
-            loading.style.display = "block";
-            question.style.display = "none";
-            optionARec.style.display = "none";
-            optionBRec.style.display = "none";
+            show(loading);
+            hide(content);
+            hide(optionARec);
+            hide(optionBRec)
             liveSend({
                 response, 
                 start_timestamp_ms,
@@ -55,24 +65,23 @@
                 optionALable.innerHTML = data.optionA;
                 optionBLable.innerHTML = data.optionB;
                 if (data.rec) {
-                    optionBRec.style.display = "block";
+                    show(optionBRec);
                 } else {
-                    optionARec.style.display = "block";
+                    show(optionARec);
                 }
-                
                 start_timestamp_ms = Date.now();
-                question.style.display = "block";
-                loading.style.display = "none";
+                show(content);
+                hide(loading);
             }
         }
 
         function submitChoice() {
-            if (optionA.checked) {
+            if (optionAInput.checked) {
                 sendResponse(0);
-                optionA.checked = false;
-            } else if (optionB.checked) {
+                optionAInput.checked = false;
+            } else if (optionBInput.checked) {
                 sendResponse(1);
-                optionB.checked = false;
+                optionBInput.checked = false;
             }
         }
 
