@@ -1,7 +1,7 @@
 from datetime import datetime
 import unittest
 
-from binary_choice_question_game.utils import (
+from binary_choice_game.utils import (
     timestamp2utcdatetime,
     try_else_none,
 )

@@ -10,7 +10,7 @@ from otree.api import (
     Page,
 )
 
-from binary_choice_question_game.utils import (
+from binary_choice_game.utils import (
     read_qns,
     shuffle_new_list,
     timestamp2utcdatetime,
