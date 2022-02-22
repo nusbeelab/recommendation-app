@@ -31,4 +31,4 @@ class C(BaseConstants):
     QUESTIONS = read_qns()
     REC_ALGO_DESC = read_rec_algo_desc()
     NUM_TRIALS = len(QUESTIONS)
-    TREATMENTS = list(RecOption)
+    TREATMENTS = list(RecOption.__members__)

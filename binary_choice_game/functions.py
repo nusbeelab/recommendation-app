@@ -1,6 +1,7 @@
 import random
 from binary_choice_game import C
 from binary_choice_game.models import Subsession, Trial
+from binary_choice_game.recommendations import RecOption
 from binary_choice_game.utils import (
     shuffle_new_list,
     timestamp2utcdatetime,
@@ -10,9 +11,12 @@ from binary_choice_game.utils import (
 
 def creating_session(subsession: Subsession):
     treatment = subsession.session.config.get("name")
+
     for player in subsession.get_players():
         player.treatment = (
-            random.choice(C.TREATMENTS).name if treatment == "R" else treatment
+            treatment
+            if treatment in C.TREATMENTS
+            else random.choice(C.TREATMENTS)
         )
         for qn in shuffle_new_list(C.QUESTIONS):
             optionA, optionB = qn if random.random() < 0.5 else qn[::-1]
