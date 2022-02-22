@@ -49,7 +49,7 @@ To export experimental data with all the information needed for the project, vis
 1. Install oTree.
 
    ```
-   pip3 install otree
+   pip3 install otree==5.7.2
    ```
 
 1. To check that everything has been properly set up, start the development server.
@@ -57,5 +57,11 @@ To export experimental data with all the information needed for the project, vis
    ```
    otree devserver
    ```
+
+### Run tests
+
+```
+python3 -m unittest
+```
 
 ## Deployment
