@@ -46,10 +46,10 @@ To export experimental data with all the information needed for the project, vis
    source venv_otree/bin/activate
    ```
 
-1. Install oTree.
+1. Install dependencies for development.
 
    ```
-   pip3 install otree==5.7.2
+   pip3 install -r requirements-dev.txt
    ```
 
 1. To check that everything has been properly set up, start the development server.
@@ -60,8 +60,16 @@ To export experimental data with all the information needed for the project, vis
 
 ### Run tests
 
+To run unit tests
+
 ```
-python3 -m unittest
+python3 -m unittest [test_module|test_class|test_method]
+```
+
+To run automated bots
+
+```
+otree test [session_config_name]
 ```
 
 ## Deployment
