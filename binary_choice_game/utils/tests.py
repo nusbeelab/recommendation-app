@@ -7,17 +7,7 @@ from binary_choice_game.utils import (
 )
 
 
-class TestMain(unittest.TestCase):
-    pass
-
-
 class TestUtils(unittest.TestCase):
-    def test_readQns_success(self):
-        pass
-
-    def test_readQns_failure(self):
-        pass
-
     def test_tryElseNone_success(self):
         self.assertEqual(try_else_none(lambda: True), True)
 
