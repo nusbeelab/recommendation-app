@@ -3,6 +3,7 @@ from binary_choice_game import C
 from binary_choice_game.models import Subsession, Trial
 from binary_choice_game.recommendations import RecOption
 from binary_choice_game.utils import (
+    get_rand_bool,
     shuffle_new_list,
     timestamp2utcdatetime,
     try_else_none,
@@ -19,7 +20,7 @@ def creating_session(subsession: Subsession):
             else random.choice(C.TREATMENTS)
         )
         for qn in shuffle_new_list(C.QUESTIONS):
-            optionA, optionB = qn if random.random() < 0.5 else qn[::-1]
+            optionA, optionB = qn if get_rand_bool() else qn[::-1]
             Trial.create(player=player, optionA=optionA, optionB=optionB)
 
 
