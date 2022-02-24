@@ -17,13 +17,13 @@ To export experimental data with all the information needed for the project, vis
 1. In terminal, navigate to the folder in which the repository will be located. Clone the repository here.
 
    ```
-   git clone https://github.com/nusbeelab/recommendation-project.git
+   git clone https://github.com/nusbeelab/recommendation-app.git
    ```
 
 1. Change the current directory to the directory of the cloned repository.
 
    ```
-   cd recommendation-project
+   cd recommendation-app
    ```
 
 1. Create a virtual environment named `venv_otree` to manage dependencies for the project.
