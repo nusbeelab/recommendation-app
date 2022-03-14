@@ -2,6 +2,10 @@
 
 ## Usage
 
+### Setup for experiment
+
+Visit https://nus-recommendation-project.herokuapp.com/sessions and create a new session with an appropriate session config and number of participants. This will create a unique single-use link for each participant.
+
 ### Export data
 
 To export experimental data with all the information needed for the project, visit https://nus-recommendation-project.herokuapp.com/export and locate the line with the phrase "custom export". Then click on the hyperlinks located on the same line to download the data, either as an excel file ("Excel") or a csv file ("Plain").
