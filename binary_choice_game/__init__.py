@@ -1,4 +1,4 @@
-import logging
+import logging.config
 from binary_choice_game.constants import C
 from binary_choice_game.models import (
     Subsession,
