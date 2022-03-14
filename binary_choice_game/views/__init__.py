@@ -1,3 +1,4 @@
+import logging
 from binary_choice_game.constants import C
 from binary_choice_game.models import Player, Trial
 from otree.api import Page
@@ -5,7 +6,6 @@ from otree.common import get_app_label_from_import_path
 
 from binary_choice_game.recommendations import NoneRecommender, get_recommender
 from binary_choice_game.utils import timestamp2utcdatetime, try_else_none
-
 
 class CustomPage(Page):
     def get_template_name(self):
@@ -34,7 +34,12 @@ def is_finished(player: Player):
 class QnPage(CustomPage):
     @staticmethod
     def live_method(player: Player, data: dict):
+        logger = logging.getLogger(__name__)
+        
+        logger.info(f"Received data from player {player.id_in_group}: {data}")
+
         if is_finished(player):
+            logger.info(f"Player {player.id_in_group} has finished.")
             return {player.id_in_group: dict(is_finished=True)}
 
         if data:
@@ -45,19 +50,24 @@ class QnPage(CustomPage):
             player.num_completed += 1
 
         if is_finished(player):
+            logger.info(f"Player {player.id_in_group} has finished.")
             return {player.id_in_group: dict(is_finished=True)}
 
         trial = get_current_trial(player)
         recommender = get_recommender(player.treatment)
         if trial.rec == None and not isinstance(recommender, NoneRecommender):
             trial.rec = recommender.rec(player, (trial.optionA, trial.optionB))
-        return {
+
+        next_trial_data = {
             player.id_in_group: dict(
                 optionA=trial.optionA,
                 optionB=trial.optionB,
                 rec=trial.rec,
             )
         }
+        logger.info(f"Next trial for player {player.id_in_group}: {next_trial_data}")
+
+        return next_trial_data
 
 
 class Results(CustomPage):

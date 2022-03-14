@@ -1,3 +1,4 @@
+import logging
 import random
 from binary_choice_game import C
 from binary_choice_game.models import Subsession, Trial
@@ -11,7 +12,9 @@ from binary_choice_game.utils import (
 
 
 def creating_session(subsession: Subsession):
+    logger = logging.getLogger(__name__)
     treatment = subsession.session.config.get("name")
+    logger.info(f"Session treatment: {treatment}")
 
     for player in subsession.get_players():
         player.treatment = (
