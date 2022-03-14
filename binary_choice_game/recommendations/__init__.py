@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from enum import Enum
+import logging
 from random import random
 from typing import Literal, Tuple, Optional
 
@@ -31,4 +32,10 @@ RECOMMENDER_HASHMAP = {
 
 
 def get_recommender(treatment: Treatment) -> Recommender:
-    return RECOMMENDER_HASHMAP[treatment]
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"Getting recommender for treatment {treatment}.")
+    recommender = RECOMMENDER_HASHMAP[treatment]
+    logger.info(f"Found recommender: {recommender}.")
+    return recommender
+

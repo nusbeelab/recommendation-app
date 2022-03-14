@@ -28,5 +28,6 @@ class Trial(ExtraModel):
     response = (
         models.BooleanField()
     )  # False (0) corresponds to optionA, True (1) corresponds to optionB
-    start_timestamp_ms = models.IntegerField()
-    end_timestamp_ms = models.IntegerField()
+    # use string to store timestamps to avoid psycopg2.errors.NumericValueOutOfRange
+    start_str_timestamp_ms = models.StringField()
+    end_str_timestamp_ms = models.StringField()

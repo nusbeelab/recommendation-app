@@ -77,3 +77,8 @@ otree test [session_config_name]
 ```
 
 ## Deployment
+
+Run 
+```
+otree zip
+```
