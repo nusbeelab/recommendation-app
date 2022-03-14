@@ -1,14 +1,11 @@
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 from random import random
-from typing import Tuple, Optional
+from typing import Literal, Tuple, Optional
 
 from binary_choice_game.models import Player
 
-
-class RecOption(Enum):
-    NoR = "NoR"
-    R_Random = "R_Random"
+Treatment = Literal["NoR", "R_Random"]
 
 
 class Recommender(metaclass=ABCMeta):
@@ -28,12 +25,10 @@ class RandomRecommender(Recommender):
 
 
 RECOMMENDER_HASHMAP = {
-    RecOption.NoR: NoneRecommender(),
-    RecOption.R_Random: RandomRecommender(),
+    "NoR": NoneRecommender(),
+    "R_Random": RandomRecommender(),
 }
 
 
-def get_recommender(treatment: str) -> Recommender:
-    return RECOMMENDER_HASHMAP.get(
-        RecOption(treatment), RECOMMENDER_HASHMAP[RecOption.NoR]
-    )
+def get_recommender(treatment: Treatment) -> Recommender:
+    return RECOMMENDER_HASHMAP[treatment]

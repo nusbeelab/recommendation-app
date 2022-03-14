@@ -15,7 +15,7 @@ class TestRecommendations(unittest.TestCase):
         self.assertIsInstance(get_recommender("R_Random"), RandomRecommender)
 
     def test_getRecommender_failure_invalidTreatment(self):
-        self.assertRaises(ValueError, lambda: get_recommender("invalid"))
+        self.assertRaises(KeyError, lambda: get_recommender("invalid"))
 
 
 if __name__ == "__main__":
