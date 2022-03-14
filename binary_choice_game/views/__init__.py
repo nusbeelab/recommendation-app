@@ -24,7 +24,12 @@ class StartPage(CustomPage):
 
 
 def get_current_trial(player: Player):
-    return Trial.filter(player=player, response=None)[0]
+    try:
+        trial = Trial.filter(player=player, response=None)[0]
+        return trial
+
+    except Exception as err:
+        logging.getLogger(__name__).error(err)
 
 
 def is_finished(player: Player):
@@ -36,24 +41,31 @@ class QnPage(CustomPage):
     def live_method(player: Player, data: dict):
         logger = logging.getLogger(__name__)
         
-        logger.info(f"Received data from player {player.id_in_group}: {data}")
+        logger.info(f"Received data from player {player.id_in_group}: {data}.")
 
         if is_finished(player):
             logger.info(f"Player {player.id_in_group} has finished.")
             return {player.id_in_group: dict(is_finished=True)}
 
         if data:
+            logger.info(f"Getting current trial for player {player.id_in_group}.")
             trial = get_current_trial(player)
+            logger.info(f"Current trial: {trial}.")
+
             trial.response = data.get("response")
-            trial.start_timestamp_ms = data.get("start_timestamp_ms")
-            trial.end_timestamp_ms = data.get("end_timestamp_ms")
+            trial.start_str_timestamp_ms = str(data.get("start_timestamp_ms"))
+            trial.end_str_timestamp_ms = str(data.get("end_timestamp_ms"))
             player.num_completed += 1
+            logger.info(f"Recorded trial: {trial}")
 
         if is_finished(player):
             logger.info(f"Player {player.id_in_group} has finished.")
             return {player.id_in_group: dict(is_finished=True)}
 
+        logger.info(f"Getting next trial for player {player.id_in_group}.")
         trial = get_current_trial(player)
+        logger.info(f"Next trial: {trial}")
+        
         recommender = get_recommender(player.treatment)
         if trial.rec == None and not isinstance(recommender, NoneRecommender):
             trial.rec = recommender.rec(player, (trial.optionA, trial.optionB))
@@ -83,12 +95,12 @@ class Results(CustomPage):
                     if trial.response == None
                     else int(trial.response),
                     utc_start_time=timestamp2utcdatetime(
-                        trial.start_timestamp_ms
+                        trial.start_str_timestamp_ms
                     ),
-                    utc_end_time=timestamp2utcdatetime(trial.end_timestamp_ms),
+                    utc_end_time=timestamp2utcdatetime(trial.end_str_timestamp_ms),
                     time_spent_ms=try_else_none(
-                        lambda: trial.end_timestamp_ms
-                        - trial.start_timestamp_ms
+                        lambda: trial.end_str_timestamp_ms
+                        - trial.start_str_timestamp_ms
                     ),
                 ),
             }
