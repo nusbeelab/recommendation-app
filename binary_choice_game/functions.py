@@ -1,7 +1,7 @@
 import random
 from binary_choice_game import C
 from binary_choice_game.models import Subsession, Trial
-from binary_choice_game.recommendations import RecOption
+from binary_choice_game.recommendations import Treatment
 from binary_choice_game.utils import (
     get_rand_bool,
     shuffle_new_list,
