@@ -59,10 +59,11 @@ class PlayerBot(Bot):
 
         # all responses and timestamps are recorded correctly
         recorded_input_data = [
-            {
-                k: getattr(trial, k)
-                for k in ["response", "start_timestamp_ms", "end_timestamp_ms"]
-            }
+            dict(
+                response=trial.response,
+                start_timestamp_ms=int(trial.start_str_timestamp_ms),
+                end_timestamp_ms=int(trial.end_str_timestamp_ms)
+            )
             for trial in trials
         ]
         expect(recorded_input_data, mock_input_data)
