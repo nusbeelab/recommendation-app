@@ -1,5 +1,5 @@
 {{ block title }}
-    Binary choice question
+    Please choose Option A or B.
 {{ endblock }}
 {{ block content }}
 
@@ -148,13 +148,21 @@
 
         function updateTable(table, data) {
             table.innerHTML = "";
-            for (const dataRow of data) {
-                const row = table.insertRow();
-                ocCell = row.insertCell()
-                ocCell.appendChild(document.createTextNode(dataRow.oc))
-                ocCell.style.textAlign = "right"
-                row.insertCell().appendChild(document.createTextNode(" with probability "))
-                row.insertCell().appendChild(document.createTextNode(dataRow.p))
+            if (data.length === 1 && data[0].p === 1) {
+                table.insertRow()
+                    .insertCell()
+                    .appendChild(document.createTextNode(`${data[0].oc} with certainty`));
+            } else {
+                for (const dataRow of data) {
+                    const row = table.insertRow();
+                    ocCell = row.insertCell()
+                    ocCell.appendChild(document.createTextNode(dataRow.oc))
+                    ocCell.style.textAlign = "right"
+                    row.insertCell()
+                        .appendChild(document.createTextNode(" with probability "))
+                    row.insertCell()
+                        .appendChild(document.createTextNode(dataRow.p))
+                }
             }
         }
     
