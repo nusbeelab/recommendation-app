@@ -30,6 +30,11 @@
             </div>
         </div>
     </div>
+    <div id="progress-bar-container">
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+    </div>
 
     
     <style>
@@ -91,6 +96,26 @@
             cursor: pointer;
         }
 
+        #progress-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4rem;
+        }
+
+        #progress-bar {
+            width: max(60%, 40rem);
+            background-color: lightgrey;
+            border-radius: 0.4rem;
+        }
+
+        #progress-fill {
+            width: 1%;
+            height: 0.8rem;
+            background-color: #52a552;
+            border-radius: 0.4rem;
+        }
+
     </style>
     
     <script>
@@ -103,6 +128,7 @@
         const rightOptionTable = rightOption.querySelector("table")
         const leftOptionRec = leftOption.querySelector(".rec")
         const rightOptionRec = rightOption.querySelector(".rec");
+        const progressBar = document.getElementById("progress-fill");
     
         function show(elem) {
             elem.style.display = "flex";
@@ -129,6 +155,7 @@
             if (data.is_finished) {
                 document.getElementById("form").submit();
             } else {
+                progressBar.style.width = `${data.progress*100}%`
                 updateTable(leftOptionTable, data.left_option)
                 updateTable(rightOptionTable, data.right_option)
                 // if (data.rec === true) {

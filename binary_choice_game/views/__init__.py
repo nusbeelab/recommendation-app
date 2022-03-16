@@ -92,6 +92,7 @@ class QnPage(CustomPage):
                 left_option=left_option,
                 right_option=right_option,
                 rec=trial.rec,
+                progress=player.num_completed / C.NUM_TRIALS,
             )
         }
         logger.info(
