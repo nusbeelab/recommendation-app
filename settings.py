@@ -1,24 +1,24 @@
 from os import environ
 
+COMMON_CONFIGS = dict(
+    num_demo_participants=1,
+    app_sequence=["binary_choice_game"],
+    question_params_file="parameters_13Mar2022.csv",
+)
+
 SESSION_CONFIGS = [
-    dict(
-        name="R",
-        display_name="Randomized Treatments",
-        num_demo_participants=1,
-        app_sequence=["binary_choice_game"],
-    ),
-    dict(
-        name="NoR",
-        display_name="No Recommendations",
-        num_demo_participants=1,
-        app_sequence=["binary_choice_game"],
-    ),
-    dict(
-        name="R_Random",
-        display_name="Random Recommendations",
-        num_demo_participants=1,
-        app_sequence=["binary_choice_game"],
-    ),
+    dict(name="NoR", display_name="Pre-experiment", **COMMON_CONFIGS),
+    # dict(
+    #     name="R",
+    #     display_name="Randomized Treatments",
+    #     **COMMON_CONFIGS
+    # ),
+    # dict(name="NoR", display_name="No Recommendations", **COMMON_CONFIGS),
+    # dict(
+    #     name="R_Random",
+    #     display_name="Random Recommendations",
+    #     **COMMON_CONFIGS
+    # ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

@@ -11,7 +11,7 @@ def get_rand_bool():
 
 
 def shuffle_new_list(lst: List[T]) -> List[T]:
-    lst_copy = lst.copy()
+    lst_copy = list(lst)
     shuffle(lst_copy)
     return lst_copy
 
@@ -24,6 +24,4 @@ def try_else_none(success: Callable[[Any], T]) -> Union[T, None]:
 
 
 def timestamp2utcdatetime(timestamp_ms: Union[int, None]):
-    return try_else_none(
-        lambda: datetime.utcfromtimestamp(round(timestamp_ms / 1000))
-    )
+    return try_else_none(lambda: datetime.utcfromtimestamp(round(timestamp_ms / 1000)))

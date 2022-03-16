@@ -1,14 +1,20 @@
 import logging
 import random
+from typing import Iterable
 from binary_choice_game import C
-from binary_choice_game.models import Subsession, Trial
+from binary_choice_game.models import Player, Subsession, Trial
 from binary_choice_game.recommendations import Treatment
 from binary_choice_game.utils import (
     get_rand_bool,
-    shuffle_new_list,
     timestamp2utcdatetime,
     try_else_none,
 )
+
+
+def generate_random_problem_id_list():
+    stages = list(C.QUESTION_DF["stage"].unique())
+    df = C.QUESTION_DF.sample(frac=1)
+    return [id for stage in stages for id in df["id"][df["stage"] == stage]]
 
 
 def creating_session(subsession: Subsession):
@@ -19,55 +25,70 @@ def creating_session(subsession: Subsession):
     try:
         for player in subsession.get_players():
             player.treatment = (
-                treatment
-                if treatment in C.TREATMENTS
-                else random.choice(C.TREATMENTS)
+                treatment if treatment in C.TREATMENTS else random.choice(C.TREATMENTS)
             )
-            for qn in shuffle_new_list(C.QUESTIONS):
-                optionA, optionB = qn if get_rand_bool() else qn[::-1]
-                Trial.create(player=player, optionA=optionA, optionB=optionB)
+            for id in generate_random_problem_id_list():
+                Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
     except Exception as err:
         logger.error(err)
 
 
-def custom_export(players):
+def get_data_export_row(player: Player, trial: Trial):
+    try:
+        df_row = C.QUESTION_DF[C.QUESTION_DF["id"] == trial.problem_id].iloc[0]
+        params_from_df = df_row[
+            [
+                "stage",
+                "problem",
+                "xa1",
+                "pa1",
+                "xa2",
+                "pa2",
+                "xa3",
+                "pa3",
+                "xb1",
+                "pb1",
+                "xb2",
+                "pb2",
+                "xb3",
+                "pb3",
+            ]
+        ]
+        response = trial.left_option if trial.button == "L" else not trial.left_option
+        start_timestamp_ms = int(trial.start_str_timestamp_ms or 0)
+        end_timestamp_ms = int(trial.end_str_timestamp_ms or 0)
+        return (
+            [
+                player.session.code,
+                player.participant.code,
+                player.treatment,
+                trial.problem_id,
+            ]
+            + list(params_from_df)
+            + [
+                trial.rec,
+                trial.button,
+                response,
+                timestamp2utcdatetime(start_timestamp_ms),
+                timestamp2utcdatetime(end_timestamp_ms),
+                try_else_none(lambda: end_timestamp_ms - start_timestamp_ms),
+            ]
+        )
+    except Exception as err:
+        logging.getLogger(__name__).error(err)
+        raise err
+
+
+def custom_export(players: Iterable[Player]):
     logger = logging.getLogger(__name__)
-    
-    logger.info("Executing custom data export.")
+
+    logger.info("Exporting data.")
 
     # header row
-    yield [
-        "session",
-        "participant_code",
-        "treatment",
-        "optionA",
-        "optionB",
-        "recommendation",
-        "response",
-        "utc_start_time",
-        "utc_end_time",
-        "time_spent_ms",
-    ]
+    yield C.DATA_EXPORT_HEADERS
     try:
         for p in players:
-            participant = p.participant
-            session = p.session
             for trial in Trial.filter(player=p):
-                start_timestamp_ms = int(trial.start_str_timestamp_ms)
-                end_timestamp_ms = int(trial.end_str_timestamp_ms)
-                yield [
-                    session.code,
-                    participant.code,
-                    p.treatment,
-                    trial.optionA,
-                    trial.optionB,
-                    trial.rec,
-                    trial.response,
-                    timestamp2utcdatetime(start_timestamp_ms),
-                    timestamp2utcdatetime(end_timestamp_ms),
-                    try_else_none(
-                        lambda: end_timestamp_ms - start_timestamp_ms
-                    ),
-                ]
+                yield get_data_export_row(p, trial)
     except Exception as err:
         logger.error(err)
