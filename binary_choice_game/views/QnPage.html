@@ -7,31 +7,43 @@
     <div id="content" style="display: none">
         <div id="qn-container">
             <div id="options">
-                <div id="optionA" class="option">
-                    <input type="radio" id="optionA-input">
-                    <label for="optionA-input"></label>
-                    <div class="rec" style="display: none;">
+                <div id="left-option" class="option">
+                    <table></table>
+                    <!-- <div class="rec" style="display: none;">
                         This option is recommended for you
-                    </div>
+                    </div> -->
                 </div>
-                <div id="optionB" class="option">
-                    <input type="radio" id="optionB-input">
-                    <label for="optionB-input"></label>
-                    <div class="rec" style="display: none;">
+                <div id="right-option" class="option">
+                    <table></table>
+                    <!-- <div class="rec" style="display: none;">
                         This option is recommended for you
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <button type="button" onclick="submitChoice()">Submit</button>
+            <div id="buttons">
+                <div class="button-container">
+                    <div class="button" onclick="sendResponse('L')">A</div>
+                </div>
+                <div class="button-container">
+                    <div class="button" onclick="sendResponse('R')">B</div>
+                </div>
+            </div>
         </div>
     </div>
 
     
     <style>
+        #content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         #qn-container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 40rem;
         }
 
         #options {
@@ -40,46 +52,74 @@
         }
         
         .option {
+            width: 20rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 20rem;
+            justify-content: center;
         }
 
         .rec {
             text-align: center;
         }
+
+        #buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #buttons .button-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button {
+            background-color: lightgrey;
+            border: solid grey;
+            height: 3rem;
+            width: 8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button:hover {
+            cursor: pointer;
+        }
+
     </style>
     
     <script>
         let start_timestamp_ms, end_timestamp_ms;
         const loading = document.getElementById("loading");
         const content = document.getElementById("content");
-        const optionA = document.getElementById("optionA");
-        const optionB = document.getElementById("optionB");
-        const optionAInput = document.getElementById("optionA-input");
-        const optionBInput = document.getElementById("optionB-input");
-        const optionALable = optionA.querySelector("label");
-        const optionBLable = optionB.querySelector("label");
-        const optionARec = optionA.querySelector(".rec")
-        const optionBRec = optionB.querySelector(".rec");
+        const leftOption = document.getElementById("left-option");
+        const rightOption = document.getElementById("right-option");
+        const leftOptionTable = leftOption.querySelector("table")
+        const rightOptionTable = rightOption.querySelector("table")
+        const leftOptionRec = leftOption.querySelector(".rec")
+        const rightOptionRec = rightOption.querySelector(".rec");
     
         function show(elem) {
-            elem.style.display = "block";
+            elem.style.display = "flex";
         }
     
         function hide(elem) {
             elem.style.display = "none";
         }
     
-        function sendResponse(response) {
+        function sendResponse(button) {
             end_timestamp_ms = Date.now();
             show(loading);
             hide(content);
-            hide(optionARec);
-            hide(optionBRec)
+            // hide(leftOptionRec);
+            // hide(rightOptionRec)
             liveSend({
-                response, 
+                button, 
                 start_timestamp_ms,
                 end_timestamp_ms
             })
@@ -89,32 +129,34 @@
             if (data.is_finished) {
                 document.getElementById("form").submit();
             } else {
-                optionALable.innerHTML = data.optionA;
-                optionBLable.innerHTML = data.optionB;
-                if (data.rec === true) {
-                    show(optionBRec);
-                } else if (data.rec === false) {
-                    show(optionARec);
-                }
+                updateTable(leftOptionTable, data.left_option)
+                updateTable(rightOptionTable, data.right_option)
+                // if (data.rec === true) {
+                //     show(rightOptionRec);
+                // } else if (data.rec === false) {
+                //     show(leftOptionRec);
+                // }
                 start_timestamp_ms = Date.now();
                 show(content);
                 hide(loading);
             }
         }
     
-        function submitChoice() {
-            if (optionAInput.checked) {
-                sendResponse(0);
-                optionAInput.checked = false;
-            } else if (optionBInput.checked) {
-                sendResponse(1);
-                optionBInput.checked = false;
-            }
-        }
-    
         document.addEventListener("DOMContentLoaded", function() {
             liveSend({});
         })
+
+        function updateTable(table, data) {
+            table.innerHTML = "";
+            for (const dataRow of data) {
+                const row = table.insertRow();
+                ocCell = row.insertCell()
+                ocCell.appendChild(document.createTextNode(dataRow.oc))
+                ocCell.style.textAlign = "right"
+                row.insertCell().appendChild(document.createTextNode(" with probability "))
+                row.insertCell().appendChild(document.createTextNode(dataRow.p))
+            }
+        }
     
     </script>
 

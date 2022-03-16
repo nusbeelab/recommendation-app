@@ -22,12 +22,11 @@ class Player(BasePlayer):
 
 class Trial(ExtraModel):
     player = models.Link(Player)
-    optionA = models.StringField()
-    optionB = models.StringField()
+    problem_id = models.IntegerField()
+    # False (0) corresponds to optionA, True (1) corresponds to optionB
+    left_option = models.BooleanField()
     rec = models.BooleanField()
-    response = (
-        models.BooleanField()
-    )  # False (0) corresponds to optionA, True (1) corresponds to optionB
+    button = models.StringField()
     # use string to store timestamps to avoid psycopg2.errors.NumericValueOutOfRange
     start_str_timestamp_ms = models.StringField()
     end_str_timestamp_ms = models.StringField()

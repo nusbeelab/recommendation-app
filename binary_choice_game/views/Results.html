@@ -5,10 +5,26 @@
 {{ block content }}
     <table class="table">
         <tr>
+            <th>session_code</th>
+            <th>participant_code</th>
             <th>treatment</th>
-            <th>optionA</th>
-            <th>optionB</th>
+            <th>problem_id</th>
+            <th>stage</th>
+            <th>problem</th>
+            <th>xa1</th>
+            <th>pa1</th>
+            <th>xa2</th>
+            <th>pa2</th>
+            <th>xa3</th>
+            <th>pa3</th>
+            <th>xb1</th>
+            <th>pb1</th>
+            <th>xb2</th>
+            <th>pb2</th>
+            <th>xb3</th>
+            <th>pb3</th>
             <th>recommendation</th>
+            <th>button</th>
             <th>response</th>
             <th>utc_start_time</th>
             <th>utc_end_time</th>
@@ -16,10 +32,26 @@
         </tr>
         {{ for t in trials }}
             <tr>
-                <td>{{ player.treatment }}</td>
-                <td>{{ t.optionA }}</td>
-                <td>{{ t.optionB }}</td>
-                <td>{{ t.rec }}</td>
+                <td>{{ t.session_code }}</td>
+                <td>{{ t.participant_code }}</td>
+                <td>{{ t.treatment }}</td>
+                <td>{{ t.problem_id }}</td>
+                <td>{{ t.stage }}</td>
+                <td>{{ t.problem }}</td>
+                <td>{{ t.xa1 }}</td>
+                <td>{{ t.pa1 }}</td>
+                <td>{{ t.xa2 }}</td>
+                <td>{{ t.pa2 }}</td>
+                <td>{{ t.xa3 }}</td>
+                <td>{{ t.pa3 }}</td>
+                <td>{{ t.xb1 }}</td>
+                <td>{{ t.pb1 }}</td>
+                <td>{{ t.xb2 }}</td>
+                <td>{{ t.pb2 }}</td>
+                <td>{{ t.xb3 }}</td>
+                <td>{{ t.pb3 }}</td>
+                <td>{{ t.recommendation }}</td>
+                <td>{{ t.button }}</td>
                 <td>{{ t.response }}</td>
                 <td>{{ t.utc_start_time }}</td>
                 <td>{{ t.utc_end_time }}</td>
