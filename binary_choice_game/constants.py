@@ -43,9 +43,9 @@ def read_rec_algo_desc() -> Dict[Treatment, str]:
 
 
 class C(BaseConstants):
-    NAME_IN_URL = "binary_choice_game"
+    NAME_IN_URL = "gamble"
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 3
     QUESTION_DF = read_qns()
     LOT_PAIR_MANAGER = get_lot_pair_manager(QUESTION_DF)
     NUM_TRIALS = len(LOT_PAIR_MANAGER.lot_pairs)

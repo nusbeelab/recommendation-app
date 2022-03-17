@@ -1,0 +1,71 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block style }}
+<style>
+  #btn {
+    margin-top: 2rem;
+  }
+</style>
+{{ endblock }}
+
+{{ block content }}
+<p>Welcome to our study.</p>
+
+<h2>Contact Information</h2>
+<p>This study is conducted by a research team in the Department of Economics, National University of Singapore. If you
+  have
+  any questions, concerns, or complaints about this study, its procedures, risks, and benefits, please write to
+  e0193210@u.nus.edu.</p>
+
+<h2>Confidentiality</h2>
+<p>This study is anonymous. The data collected in this study do not include any personally identifiable information
+  about
+  you. By participating, you understand and agree that the data collected in this study will be used by our research
+  team
+  and aggregated results will be published.</p>
+
+<h2>Duration</h2>
+<p>This study lasts approximately 20 minutes.</p>
+<p>You may choose to stop participating in this study at any time.</p>
+
+<h2>Payment</h2>
+<p>You will receive a $1.5 participation fee after you finish the entire study.</p>
+<p>You may receive an additional payment of up to $6.25, depending partly on the decisions you make and partly on
+  chance. The transfer of the additional payment will take up a week.</p>
+<p>All payments and procedures will be implemented in exactly the manner described in this experiment and on the Amazon
+  Mechanical Turk platform.</p>
+
+<h2>Qualification</h2>
+<p>A set of instructions will be given at the start. Please read the instructions carefully. There will be simple
+  questions
+  to check your understanding. If you do not answer these questions correctly, you will not be able to continue the
+  study.</p>
+
+<p>Please click the following boxes to indicate that you have understood and accept the rules.</p>
+
+<form>
+  <input type="checkbox" id="choice-0">
+  <label for="choice-0">I am a US resident and 21 years or older.</label><br>
+  <input type="checkbox" id="choice-1">
+  <label for="choice-1">I would like to participate in this study and agree to the above rules.</label><br>
+</form>
+
+<button id="btn" class="otree-btn-next btn btn-primary">Next</button>
+{{ endblock }}
+
+{{ block script }}
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  ;
+  const submitButton = document.getElementById('btn');
+
+  function checkButtonStatus() {
+    submitButton.disabled = ![...checkboxes].every(cb => cb.checked);
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', checkButtonStatus));
+
+  checkButtonStatus();
+</script>
+{{ endblock }}

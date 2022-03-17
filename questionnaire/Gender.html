@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>What is your gender?</p>
+{{ form.gender }}
+{{ formfield_errors 'gender' }}
+{{ next_button }}
+{{ endblock }}

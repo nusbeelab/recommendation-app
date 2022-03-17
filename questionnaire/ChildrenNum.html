@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>Have you had any children?</p>
+{{ form.children_num }}
+{{ formfield_errors 'children_num' }}
+{{ next_button }}
+{{ endblock }}

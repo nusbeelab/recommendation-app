@@ -1,0 +1,18 @@
+{% extends "global/McqWithOtherOption.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>What is your nationality?</p>
+<form id="form">
+  <input type="radio" id="choice0" name="fieldname" value="American" />
+  <label for="choice0">American</label><br />
+  <input type="radio" id="choice1" name="fieldname" value="Indian" />
+  <label for="choice1">Indian</label><br />
+  <input type="radio" id="choice2" name="fieldname" value="Canadian" />
+  <label for="choice2">Canadian</label><br />
+  <input type="radio" id="other" name="fieldname" value="Other" />
+  <label for="other" value="Other">Other</label>
+  <input type="text" id="other-textfield" /><br />
+</form>
+<button id="btn" class="otree-btn-next btn btn-primary">Next</button>
+{{ endblock }}

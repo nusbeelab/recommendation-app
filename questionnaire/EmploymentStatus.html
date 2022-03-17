@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>What is your current employment status?</p>
+{{ form.employment_status }}
+{{ formfield_errors 'employment_status' }}
+{{ next_button }}
+{{ endblock }}
