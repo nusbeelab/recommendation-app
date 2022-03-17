@@ -1,0 +1,45 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block mcq_with_other_option_styles %}
+{% endblock %}
+
+{% block mcq_with_other_option_scripts %}
+<script>
+  const form = document.getElementById('form');
+  const radios = document.getElementsByName('fieldname');
+  const otherRadio = document.getElementById('other');
+  const otherTextField = document.getElementById('other-textfield');
+  const submitButton = document.getElementById('btn');
+
+  function checkButtonStatus() {
+    if (otherRadio.checked) {
+      submitButton.disabled = otherTextField.value === '';
+    } else {
+      submitButton.disabled = ![...radios].some((r) => r.checked);
+    }
+  }
+
+  function checkOtherChosen() {
+    otherTextField.disabled = !otherRadio.checked;
+  }
+
+  function inputCallback() {
+    checkButtonStatus();
+    checkOtherChosen();
+  }
+
+  radios.forEach((r) => r.addEventListener('change', inputCallback));
+  otherTextField.addEventListener('input', inputCallback);
+  otherTextField.addEventListener('propertychange', inputCallback);
+  inputCallback();
+
+  form.addEventListener('submit', () => {
+    let fieldValue = document.querySelector('input[name="fieldname"]:checked').value;
+    if (fieldValue === 'Other') {
+      fieldValue = otherTextField.value;
+    }
+    liveSend(fieldValue);
+  });
+</script>
+{% endblock %}

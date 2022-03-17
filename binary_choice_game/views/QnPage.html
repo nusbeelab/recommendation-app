@@ -1,198 +1,150 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
 {{ block title }}
-    Please choose Option A or B.
+Please choose Option A or B.
 {{ endblock }}
+
+{{ block style }}
+<style>
+    #content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #progress-bar-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 4rem;
+    }
+
+    #progress-bar {
+        width: max(60%, 40rem);
+        background-color: lightgrey;
+        border-radius: 0.4rem;
+    }
+
+    #progress-fill {
+        width: 1%;
+        height: 0.8rem;
+        background-color: #52a552;
+        border-radius: 0.4rem;
+    }
+</style>
+{{ endblock }}
+
 {{ block content }}
-
-    <div id="loading">...loading</div>
-    <div id="content" style="display: none">
-        <div id="qn-container">
-            <div id="options">
-                <div id="left-option" class="option">
-                    <table></table>
-                    <!-- <div class="rec" style="display: none;">
+<div id="loading">...loading</div>
+<div id="content" style="display: none">
+    <div class="qn-container">
+        <div class="options">
+            <div id="left-option" class="option">
+                <table></table>
+                <!-- <div class="rec" style="display: none;">
                         This option is recommended for you
                     </div> -->
-                </div>
-                <div id="right-option" class="option">
-                    <table></table>
-                    <!-- <div class="rec" style="display: none;">
-                        This option is recommended for you
-                    </div> -->
-                </div>
             </div>
-            <div id="buttons">
-                <div class="button-container">
-                    <div class="button" onclick="sendResponse('L')">A</div>
-                </div>
-                <div class="button-container">
-                    <div class="button" onclick="sendResponse('R')">B</div>
-                </div>
+            <div id="right-option" class="option">
+                <table></table>
+                <!-- <div class="rec" style="display: none;">
+                        This option is recommended for you
+                    </div> -->
+            </div>
+        </div>
+        <div class="qn-btns">
+            <div class="qn-btn-container">
+                <div class="qn-btn" onclick="sendResponse('L')">A</div>
+            </div>
+            <div class="qn-btn-container">
+                <div class="qn-btn" onclick="sendResponse('R')">B</div>
             </div>
         </div>
     </div>
-    <div id="progress-bar-container">
-        <div id="progress-bar">
-            <div id="progress-fill"></div>
-        </div>
+</div>
+<div id="progress-bar-container">
+    <div id="progress-bar">
+        <div id="progress-fill"></div>
     </div>
+</div>
+{{ endblock }}
 
-    
-    <style>
-        #content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+{{ block script }}
+<script>
+    let start_timestamp_ms, end_timestamp_ms;
+    const loading = document.getElementById("loading");
+    const content = document.getElementById("content");
+    const leftOption = document.getElementById("left-option");
+    const rightOption = document.getElementById("right-option");
+    const leftOptionTable = leftOption.querySelector("table");
+    const rightOptionTable = rightOption.querySelector("table");
+    const leftOptionRec = leftOption.querySelector(".rec");
+    const rightOptionRec = rightOption.querySelector(".rec");
+    const progressBar = document.getElementById("progress-fill");
 
-        #qn-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 40rem;
-        }
+    function show(elem) {
+        elem.style.display = "flex";
+    }
 
-        #options {
-            display: flex;
-            padding-bottom: 1rem;
-        }
-        
-        .option {
-            width: 20rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+    function hide(elem) {
+        elem.style.display = "none";
+    }
 
-        .rec {
-            text-align: center;
-        }
+    function sendResponse(button) {
+        end_timestamp_ms = Date.now();
+        show(loading);
+        hide(content);
+        // hide(leftOptionRec);
+        // hide(rightOptionRec)
+        liveSend({
+            button,
+            start_timestamp_ms,
+            end_timestamp_ms
+        });
+    }
 
-        #buttons {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+    function liveRecv(data) {
+        if (data.is_finished) {
+            document.getElementById("form").submit();
+        } else {
+            progressBar.style.width = `${data.progress * 100}%`;
+            updateTable(leftOptionTable, data.left_option);
+            updateTable(rightOptionTable, data.right_option);
+            // if (data.rec === true) {
+            //     show(rightOptionRec);
+            // } else if (data.rec === false) {
+            //     show(leftOptionRec);
+            // }
+            start_timestamp_ms = Date.now();
+            show(content);
+            hide(loading);
         }
+    }
 
-        #buttons .button-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    document.addEventListener("DOMContentLoaded", function () {
+        liveSend({});
+    });
 
-        .button {
-            background-color: lightgrey;
-            border: solid grey;
-            height: 3rem;
-            width: 8rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .button:hover {
-            cursor: pointer;
-        }
-
-        #progress-bar-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 4rem;
-        }
-
-        #progress-bar {
-            width: max(60%, 40rem);
-            background-color: lightgrey;
-            border-radius: 0.4rem;
-        }
-
-        #progress-fill {
-            width: 1%;
-            height: 0.8rem;
-            background-color: #52a552;
-            border-radius: 0.4rem;
-        }
-
-    </style>
-    
-    <script>
-        let start_timestamp_ms, end_timestamp_ms;
-        const loading = document.getElementById("loading");
-        const content = document.getElementById("content");
-        const leftOption = document.getElementById("left-option");
-        const rightOption = document.getElementById("right-option");
-        const leftOptionTable = leftOption.querySelector("table")
-        const rightOptionTable = rightOption.querySelector("table")
-        const leftOptionRec = leftOption.querySelector(".rec")
-        const rightOptionRec = rightOption.querySelector(".rec");
-        const progressBar = document.getElementById("progress-fill");
-    
-        function show(elem) {
-            elem.style.display = "flex";
-        }
-    
-        function hide(elem) {
-            elem.style.display = "none";
-        }
-    
-        function sendResponse(button) {
-            end_timestamp_ms = Date.now();
-            show(loading);
-            hide(content);
-            // hide(leftOptionRec);
-            // hide(rightOptionRec)
-            liveSend({
-                button, 
-                start_timestamp_ms,
-                end_timestamp_ms
-            })
-        }
-    
-        function liveRecv(data) {
-            if (data.is_finished) {
-                document.getElementById("form").submit();
-            } else {
-                progressBar.style.width = `${data.progress*100}%`
-                updateTable(leftOptionTable, data.left_option)
-                updateTable(rightOptionTable, data.right_option)
-                // if (data.rec === true) {
-                //     show(rightOptionRec);
-                // } else if (data.rec === false) {
-                //     show(leftOptionRec);
-                // }
-                start_timestamp_ms = Date.now();
-                show(content);
-                hide(loading);
+    function updateTable(table, data) {
+        table.innerHTML = "";
+        if (data.length === 1 && data[0].p === 1) {
+            table.insertRow()
+                .insertCell()
+                .appendChild(document.createTextNode(`${data[0].oc} with certainty`));
+        } else {
+            for (const dataRow of data) {
+                const row = table.insertRow();
+                ocCell = row.insertCell();
+                ocCell.appendChild(document.createTextNode(dataRow.oc));
+                ocCell.style.textAlign = "right";
+                row.insertCell()
+                    .appendChild(document.createTextNode(" with probability "));
+                row.insertCell()
+                    .appendChild(document.createTextNode(dataRow.p));
             }
         }
-    
-        document.addEventListener("DOMContentLoaded", function() {
-            liveSend({});
-        })
+    }
 
-        function updateTable(table, data) {
-            table.innerHTML = "";
-            if (data.length === 1 && data[0].p === 1) {
-                table.insertRow()
-                    .insertCell()
-                    .appendChild(document.createTextNode(`${data[0].oc} with certainty`));
-            } else {
-                for (const dataRow of data) {
-                    const row = table.insertRow();
-                    ocCell = row.insertCell()
-                    ocCell.appendChild(document.createTextNode(dataRow.oc))
-                    ocCell.style.textAlign = "right"
-                    row.insertCell()
-                        .appendChild(document.createTextNode(" with probability "))
-                    row.insertCell()
-                        .appendChild(document.createTextNode(dataRow.p))
-                }
-            }
-        }
-    
-    </script>
-
+</script>
 {{ endblock }}

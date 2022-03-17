@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>What is your education level?</p>
+{{ form.education_level }}
+{{ formfield_errors 'education_level' }}
+{{ next_button }}
+{{ endblock }}

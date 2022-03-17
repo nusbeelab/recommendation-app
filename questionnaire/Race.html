@@ -1,0 +1,22 @@
+{% extends "global/McqWithOtherOption.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>What is your race?</p>
+<form id="form">
+  <input type="radio" id="choice0" name="fieldname" value="American Indian or Alaska Native" />
+  <label for="choice0">American Indian or Alaska Native</label><br />
+  <input type="radio" id="choice1" name="fieldname" value="Asian" />
+  <label for="choice1">Asian</label><br />
+  <input type="radio" id="choice2" name="fieldname" value="Black or African American" />
+  <label for="choice2">Black or African American</label><br />
+  <input type="radio" id="choice3" name="fieldname" value="Native Hawaiian or Other Pacific Islander" />
+  <label for="choice3">Native Hawaiian or Other Pacific Islander</label><br />
+  <input type="radio" id="choice4" name="fieldname" value="White" />
+  <label for="choice3">White</label><br />
+  <input type="radio" id="other" name="fieldname" value="Other" />
+  <label for="other" value="Other">Other</label>
+  <input type="text" id="other-textfield" /><br />
+</form>
+<button id="btn" class="otree-btn-next btn btn-primary">Next</button>
+{{ endblock }}

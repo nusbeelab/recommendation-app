@@ -1,16 +1,14 @@
 import logging
+from common import CustomPage
 from binary_choice_game.constants import C
 from binary_choice_game.functions import get_data_export_row
 from binary_choice_game.models import Player, Trial
-from otree.api import Page
 from otree.common import get_app_label_from_import_path
 
 from recommendation_data_toolbox.lottery import Lottery
 
-from binary_choice_game.utils import timestamp2utcdatetime, try_else_none
 
-
-class CustomPage(Page):
+class GamePage(CustomPage):
     def get_template_name(self):
         if self.template_name is not None:
             return self.template_name
@@ -20,10 +18,8 @@ class CustomPage(Page):
         )
 
 
-class StartPage(CustomPage):
-    @staticmethod
-    def vars_for_template(player: Player):
-        return dict(rec_algo_desc=C.REC_ALGO_DESC.get(player.treatment))
+class StartPage(GamePage):
+    pass
 
 
 def get_current_trial(player: Player):
@@ -45,7 +41,7 @@ def unpack_lottery(lot: Lottery):
     ]
 
 
-class QnPage(CustomPage):
+class QnPage(GamePage):
     @staticmethod
     def live_method(player: Player, data: dict):
         logger = logging.getLogger(__name__)
@@ -102,7 +98,11 @@ class QnPage(CustomPage):
         return next_trial_data
 
 
-class Results(CustomPage):
+class EndPage(GamePage):
+    pass
+
+
+class Results(GamePage):
     @staticmethod
     def vars_for_template(player: Player):
         logger = logging.getLogger(__name__)
@@ -123,4 +123,11 @@ class Results(CustomPage):
         return dict(trials=trials)
 
 
-page_sequence = [StartPage, QnPage, Results]
+PRE_EXPERIMENT_SEQ = [
+    StartPage,
+    QnPage,
+    EndPage,
+    # Results,
+]
+
+page_sequence = PRE_EXPERIMENT_SEQ

@@ -1,0 +1,8 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>You have finished our experiment. Thanks for your participation.</p>
+<p>Your survey ID is {{ participant.code }}. Please report this ID in Mturk.</p>
+{{ next_button }}
+{{ endblock }}

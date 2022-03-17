@@ -1,0 +1,77 @@
+{% extends "global/UnderstandingTesting.html" %}
+{% load otree %}
+
+{{ block title }}
+Understanding Testing 2
+{{ endblock }}
+
+{{ block content }}
+
+<div class="qn-container">
+  <div class="options">
+    <div class="option">
+      <table>
+        <tr>
+          <td style="text-align: right;">0</td>
+          <td> with probability </td>
+          <td>0.75</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">200</td>
+          <td> with probability </td>
+          <td>0.25</td>
+        </tr>
+      </table>
+    </div>
+    <div class="option">
+      <table>
+        <tr>
+          <td style="text-align: right;">15</td>
+          <td> with probability </td>
+          <td>0.25</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">50</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">85</td>
+          <td> with probability </td>
+          <td>0.25</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="qn-btns">
+    <div class="qn-btn-container">
+      <div class="qn-btn">A</div>
+    </div>
+    <div class="qn-btn-container">
+      <div class="qn-btn">B</div>
+    </div>
+  </div>
+</div>
+
+<p>Which <b>two</b> of the following statements are true for this example?</p>
+
+<form id="form">
+  <input type="checkbox" id="choice0">
+  <label for="choice0">If I choose Option A, I will gain 200 points for sure.</label><br>
+  <input type="checkbox" id="choice1">
+  <label for="choice1">If I choose Option A, I will gain 200 points with probability 0.25.</label><br>
+  <input type="checkbox" id="choice2">
+  <label for="choice2">If I choose Option B, there are 3 possible consequences, 15 points, 50 points, or 85 points.
+    Among them, 50 points is
+    the most likely consequence.</label><br>
+  <input type="checkbox" id="choice3">
+  <label for="choice3">If I choose Option B, it is possible for me to earn 200 points.</label><br>
+</form>
+{{ next_button }}
+{{ endblock }}
+
+{{ block script }}
+<script>
+  addFormValidation([false, true, true, false])
+</script>
+{{ endblock }}

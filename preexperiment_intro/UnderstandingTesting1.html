@@ -1,0 +1,66 @@
+{% extends "global/UnderstandingTesting.html" %}
+{% load otree %}
+
+{{ block title }}
+Understanding Testing 1
+{{ endblock }}
+
+{{ block content }}
+
+<div class="qn-container">
+  <div class="options">
+    <div class="option">
+      <table>
+        <tr>
+          <td>100 with certainty</td>
+        </tr>
+      </table>
+    </div>
+    <div class="option">
+      <table>
+        <tr>
+          <td style="text-align: right;">0</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">200</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="qn-btns">
+    <div class="qn-btn-container">
+      <div class="qn-btn">A</div>
+    </div>
+    <div class="qn-btn-container">
+      <div class="qn-btn">B</div>
+    </div>
+  </div>
+</div>
+
+<p>Which <b>two</b> of the following statements are true for this example?</p>
+
+<form id="form">
+  <input type="checkbox" id="choice0">
+  <label for="choice0">If I choose Option A, I will gain 100 points for sure.</label><br>
+  <input type="checkbox" id="choice1">
+  <label for="choice1">If I choose Option A, I will gain 0 point for sure.</label><br>
+  <input type="checkbox" id="choice2">
+  <label for="choice2">If I choose Option B, I will gain an average of 0 point and 200 points. That is, I will gain 100
+    points for sure.</label><br>
+  <input type="checkbox" id="choice3">
+  <label for="choice3">If I choose Option B, I will gain an uncertain payment – with probability 0.5, I gain 0 point;
+    with probability 0.5, I
+    gain 200 points.</label><br>
+</form>
+{{ next_button }}
+{{ endblock }}
+
+{{ block script }}
+<script>
+  addFormValidation([true, false, false, true])
+</script>
+{{ endblock }}

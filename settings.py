@@ -1,24 +1,32 @@
 from os import environ
 
-COMMON_CONFIGS = dict(
-    num_demo_participants=1,
-    app_sequence=["binary_choice_game"],
-    question_params_file="parameters_13Mar2022.csv",
-)
-
 SESSION_CONFIGS = [
-    dict(name="NoR", display_name="Pre-experiment", **COMMON_CONFIGS),
-    # dict(
-    #     name="R",
-    #     display_name="Randomized Treatments",
-    #     **COMMON_CONFIGS
-    # ),
-    # dict(name="NoR", display_name="No Recommendations", **COMMON_CONFIGS),
-    # dict(
-    #     name="R_Random",
-    #     display_name="Random Recommendations",
-    #     **COMMON_CONFIGS
-    # ),
+    dict(
+        name="preexperiment",
+        display_name="Pre-experiment",
+        app_sequence=["preexperiment_intro", "binary_choice_game", "questionnaire"],
+        num_demo_participants=1,
+        question_params_file="parameters_13Mar2022.csv",
+    ),
+    dict(
+        name="preexperiment_intro",
+        display_name="Pre-experiment Intro",
+        app_sequence=["preexperiment_intro"],
+        num_demo_participants=1,
+    ),
+    dict(
+        name="preexperiment_game",
+        display_name="Pre-experiment Problems",
+        app_sequence=["binary_choice_game"],
+        num_demo_participants=1,
+        question_params_file="parameters_13Mar2022.csv",
+    ),
+    dict(
+        name="preexperiment_questionnaire",
+        display_name="Pre-experiment Questionnaire",
+        app_sequence=["questionnaire"],
+        num_demo_participants=1,
+    ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
@@ -30,7 +38,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = []
+PARTICIPANT_FIELDS = ["is_qualified", "treatment"]
 SESSION_FIELDS = []
 
 # ISO-639 code

@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>Is your child a boy or a girl?</p>
+{{ form.child_sex }}
+{{ formfield_errors 'child_sex' }}
+{{ next_button }}
+{{ endblock }}

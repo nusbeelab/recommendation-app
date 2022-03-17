@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>Generally, is artificial intelligence helpful to you or harmful to you?</p>
+{{ form.ai_opinion }}
+{{ formfield_errors 'ai_opinion' }}
+{{ next_button }}
+{{ endblock }}

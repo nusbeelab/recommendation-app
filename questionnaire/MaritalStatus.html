@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>Are you currently:</p>
+{{ form.marital_status }}
+{{ formfield_errors 'marital_status' }}
+{{ next_button }}
+{{ endblock }}

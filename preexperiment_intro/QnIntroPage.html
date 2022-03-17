@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block style }}
+<style>
+  #ul {
+    margin-top: 2rem;
+  }
+</style>
+{{ endblock }}
+
+{{ block content }}
+<p>This study consists of 3 parts. Each part has 60 questions.</p>
+
+<p>In each question, you will be asked to choose between two options of payment, which can be either certain or
+  uncertain.
+  Payment is presented in the unit of points, 100 points = 1 USD.</p>
+<ul>
+  <li>If the payment is certain, it will be described as “X with certainty”;</li>
+  <li>If the payment is uncertain, all possible outcomes and corresponding possibilities will be explicitly described in
+    the
+    form of “X1 with probability P1”.</li>
+</ul>
+
+<p>Here is an exaple.</p>
+
+<div class="qn-container">
+  <div class="options">
+    <div class="option">
+      <table>
+        <tr>
+          <td>50 with certainty</td>
+        </tr>
+      </table>
+    </div>
+    <div class="option">
+      <table>
+        <tr>
+          <td style="text-align: right;">0</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">100</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="qn-btns">
+    <div class="qn-btn-container">
+      <div class="qn-btn">A</div>
+    </div>
+    <div class="qn-btn-container">
+      <div class="qn-btn">B</div>
+    </div>
+  </div>
+</div>
+
+<ul id="ul">
+  <li>If you choose Option A, you receive 50 points with certainty.</li>
+  <li>If you choose Option B, you receive 0 point with probability 0.5 and receive 100 points with probability 0.5.
+  </li>
+</ul>
+{{ next_button }}
+{{ endblock }}
