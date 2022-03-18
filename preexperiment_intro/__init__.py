@@ -1,12 +1,13 @@
-from otree.api import BaseConstants, BaseSubsession, BaseGroup, BasePlayer, models
-
-from common import CustomPage, set_qualified_participant_if_none
+from otree.api import BaseConstants, BaseSubsession, BaseGroup, BasePlayer, models, Page
 
 
 class C(BaseConstants):
     NAME_IN_URL = "intro"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
+    QN1_CORRECT_ANS = [True, False, False, True]
+    QN2_CORRECT_ANS = [False, True, True, False]
+    QN3_CORRECT_ANS = [False, True, False, True]
 
 
 class Subsession(BaseSubsession):
@@ -18,17 +19,19 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    mturk_id = models.StringField()
+    pass_testing_qns = models.BooleanField(initial=True)
+    prolific_id = models.StringField()
 
 
-def creating_session(subsession: Subsession):
-    for player in subsession.get_players():
-        set_qualified_participant_if_none(player)
+class CustomPage(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.pass_testing_qns
 
 
-class MTurkIdPage(CustomPage):
+class ProlificIdPage(CustomPage):
     form_model = "player"
-    form_fields = ["mturk_id"]
+    form_fields = ["prolific_id"]
 
 
 class WelcomePage(CustomPage):
@@ -43,30 +46,34 @@ class RewardIntroPage(CustomPage):
     pass
 
 
-class UnderstandingTesting(CustomPage):
+class UnderstandingTesting1(CustomPage):
+    def live_method(player: Player, data):
+        player.pass_testing_qns = data == C.QN1_CORRECT_ANS
+
+
+class UnderstandingTesting2(CustomPage):
+    def live_method(player: Player, data):
+        player.pass_testing_qns = data == C.QN2_CORRECT_ANS
+
+
+class UnderstandingTesting3(CustomPage):
+    def live_method(player: Player, data):
+        player.pass_testing_qns = data == C.QN3_CORRECT_ANS
+
+
+class WrongAnsPage(Page):
     @staticmethod
-    def live_method(player: Player, _):
-        player.participant.is_qualified = False
-
-
-class UnderstandingTesting1(UnderstandingTesting):
-    pass
-
-
-class UnderstandingTesting2(UnderstandingTesting):
-    pass
-
-
-class UnderstandingTesting3(UnderstandingTesting):
-    pass
+    def is_displayed(player: Player):
+        return not player.pass_testing_qns
 
 
 page_sequence = [
-    MTurkIdPage,
+    ProlificIdPage,
     WelcomePage,
     QnIntroPage,
     RewardIntroPage,
     UnderstandingTesting1,
     UnderstandingTesting2,
     UnderstandingTesting3,
+    WrongAnsPage,
 ]

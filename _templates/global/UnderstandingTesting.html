@@ -19,13 +19,13 @@
 
   function addFormValidation(correctCheckedValues) {
     form.addEventListener("submit", () => {
-      isCorrect = choice0.checked === correctCheckedValues[0] &&
-        choice1.checked === correctCheckedValues[1] &&
-        choice2.checked === correctCheckedValues[2] &&
-        choice3.checked == correctCheckedValues[3];
-      if (!isCorrect) {
-        liveSend(0);
-      }
+      // isCorrect = choice0.checked === correctCheckedValues[0] &&
+      //   choice1.checked === correctCheckedValues[1] &&
+      //   choice2.checked === correctCheckedValues[2] &&
+      //   choice3.checked == correctCheckedValues[3];
+      // if (!isCorrect) {
+      liveSend([choice0, choice1, choice2, choice3].map(x => x.checked));
+      // }
     });
   }
 </script>
