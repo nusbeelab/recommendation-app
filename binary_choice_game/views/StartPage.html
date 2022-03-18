@@ -14,3 +14,14 @@
 {{ endif }}
 {{ next_button }}
 {{ endblock }}
+
+{{ block script }}
+<script>
+  const nextBtn = document.querySelector(".otree-btn-next");
+  const roundNumber = js_vars.round_number;
+  if ([2, 3].includes(roundNumber)) {
+    nextBtn.style.display = "none";
+    setTimeout(() => nextBtn.form.submit(), 10000);
+  }
+</script>
+{{ endblock }}

@@ -21,7 +21,9 @@ class GamePage(Page):
 
 
 class StartPage(GamePage):
-    pass
+    @staticmethod
+    def js_vars(player: Player):
+        return dict(round_number=player.round_number)
 
 
 def get_current_trial(player: Player):
