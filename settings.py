@@ -1,5 +1,7 @@
 from os import environ
 
+QUESTIONS_CSV_FILE = "parameters_16Mar2022.csv"
+
 SESSION_CONFIGS = [
     dict(
         name="preexperiment",
@@ -11,7 +13,6 @@ SESSION_CONFIGS = [
             "empty_app",
         ],
         num_demo_participants=1,
-        question_params_file="parameters_13Mar2022.csv",
         treatment="NoR",
     ),
     dict(
@@ -25,7 +26,6 @@ SESSION_CONFIGS = [
         display_name="Pre-experiment Problems",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
-        question_params_file="parameters_13Mar2022.csv",
         treatment="NoR",
     ),
     dict(

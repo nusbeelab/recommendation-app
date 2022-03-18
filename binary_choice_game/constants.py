@@ -9,6 +9,7 @@ import pandas as pd
 from recommendation_data_toolbox.lottery import Lottery, LotteryPair, LotteryPairManager
 
 from binary_choice_game.recommendations import Treatment
+from settings import QUESTIONS_CSV_FILE
 
 config_filepath = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -17,7 +18,7 @@ config_filepath = os.path.join(
 
 
 def read_qns_by_stage() -> Dict[int, pd.DataFrame]:
-    filepath = os.path.join(config_filepath, "parameters_15Mar2022.csv")
+    filepath = os.path.join(config_filepath, QUESTIONS_CSV_FILE)
     return dict(
         tuple(pd.read_csv(filepath).rename_axis("id").reset_index().groupby("stage"))
     )
