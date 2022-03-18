@@ -1,0 +1,9 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block content }}
+<div>Please enter your Prolific ID:</div>
+{{ form.prolific_id }}
+{{ formfield_errors 'prolific_id' }}
+{{ next_button }}
+{{ endblock }}
