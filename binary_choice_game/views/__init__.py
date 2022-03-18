@@ -21,7 +21,9 @@ class GamePage(Page):
 
 
 class StartPage(GamePage):
-    pass
+    @staticmethod
+    def js_vars(player: Player):
+        return dict(round_number=player.round_number)
 
 
 def get_current_trial(player: Player):
@@ -34,7 +36,7 @@ def get_current_trial(player: Player):
 
 
 def is_finished(player: Player):
-    return player.num_completed == C.NUM_TRIALS
+    return player.num_completed == C.NUM_TRIALS_BY_STAGE[player.round_number]
 
 
 def unpack_lottery(lot: Lottery):
@@ -90,7 +92,8 @@ class QnPage(GamePage):
                 left_option=left_option,
                 right_option=right_option,
                 rec=trial.rec,
-                progress=player.num_completed / C.NUM_TRIALS,
+                progress=player.num_completed
+                / C.NUM_TRIALS_BY_STAGE[player.round_number],
             )
         }
         logger.info(
@@ -101,7 +104,11 @@ class QnPage(GamePage):
 
 
 class EndPage(GamePage):
-    pass
+    @staticmethod
+    def is_displayed(player: Player):
+        return (
+            super(GamePage, GamePage).is_displayed(player) and player.round_number == 3
+        )
 
 
 class Results(GamePage):

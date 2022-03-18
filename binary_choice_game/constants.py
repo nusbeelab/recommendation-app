@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Dict
+from typing import Any, Dict
 import typing
 import numpy as np
 from otree.api import BaseConstants
@@ -9,11 +9,19 @@ import pandas as pd
 from recommendation_data_toolbox.lottery import Lottery, LotteryPair, LotteryPairManager
 
 from binary_choice_game.recommendations import Treatment
+from settings import QUESTIONS_CSV_FILE
 
 config_filepath = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "experimental_config",
 )
+
+
+def read_qns_by_stage() -> Dict[int, pd.DataFrame]:
+    filepath = os.path.join(config_filepath, QUESTIONS_CSV_FILE)
+    return dict(
+        tuple(pd.read_csv(filepath).rename_axis("id").reset_index().groupby("stage"))
+    )
 
 
 def map_question_param_to_lot_pair(row: pd.Series):
@@ -26,14 +34,13 @@ def map_question_param_to_lot_pair(row: pd.Series):
     return LotteryPair(lot_a, lot_b)
 
 
-def read_qns():
-    filepath = os.path.join(config_filepath, "parameters_15Mar2022.csv")
-    return pd.read_csv(filepath).rename_axis("id").reset_index()
-
-
 def get_lot_pair_manager(df: pd.DataFrame):
     lot_pairs = list(df.apply(map_question_param_to_lot_pair, axis=1))
     return LotteryPairManager(lot_pairs=lot_pairs)
+
+
+def get_num_trials_by_stage(dfs: Dict[Any, pd.DataFrame]):
+    return {k: len(v) for k, v in dfs.items()}
 
 
 def read_rec_algo_desc() -> Dict[Treatment, str]:
@@ -46,9 +53,9 @@ class C(BaseConstants):
     NAME_IN_URL = "gamble"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 3
-    QUESTION_DF = read_qns()
-    LOT_PAIR_MANAGER = get_lot_pair_manager(QUESTION_DF)
-    NUM_TRIALS = len(LOT_PAIR_MANAGER.lot_pairs)
+    QUESTIONS_DF_BY_STAGE = read_qns_by_stage()
+    LOT_PAIR_MANAGER = get_lot_pair_manager(pd.concat(QUESTIONS_DF_BY_STAGE.values()))
+    NUM_TRIALS_BY_STAGE = get_num_trials_by_stage(QUESTIONS_DF_BY_STAGE)
     REC_ALGO_DESC = read_rec_algo_desc()
     TREATMENTS = typing.get_args(Treatment)
     DATA_EXPORT_HEADERS = [

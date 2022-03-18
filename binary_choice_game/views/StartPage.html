@@ -2,7 +2,26 @@
 {% load otree %}
 
 {{ block content }}
+{{ if player.round_number == 1 }}
 <p>You have finished the understanding testing questions.</p>
-<p>Now you can start Part X.</p>
+<p>Now you can start Part 1.</p>
+{{ elif player.round_number == 2 }}
+<p>You have finished Part 1.</p>
+<p>Please wait for Part 2 to start.</p>
+{{ elif player.round_number == 3 }}
+<p>You have finished Part 2.</p>
+<p>Please wait for Part 3 to start.</p>
+{{ endif }}
 {{ next_button }}
+{{ endblock }}
+
+{{ block script }}
+<script>
+  const nextBtn = document.querySelector(".otree-btn-next");
+  const roundNumber = js_vars.round_number;
+  if ([2, 3].includes(roundNumber)) {
+    nextBtn.style.display = "none";
+    setTimeout(() => nextBtn.form.submit(), 10000);
+  }
+</script>
 {{ endblock }}
