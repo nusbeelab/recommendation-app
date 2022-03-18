@@ -24,7 +24,7 @@ def creating_session(subsession: Subsession):
             player.participant.treatment = (
                 treatment if treatment in C.TREATMENTS else random.choice(C.TREATMENTS)
             )
-            for id in generate_random_problem_id_list():
+            for id in generate_random_problem_id_list(subsession.round_number):
                 Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
     except Exception as err:
         logger.error(err)

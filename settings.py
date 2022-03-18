@@ -4,7 +4,12 @@ SESSION_CONFIGS = [
     dict(
         name="preexperiment",
         display_name="Pre-experiment",
-        app_sequence=["preexperiment_intro", "binary_choice_game", "questionnaire"],
+        app_sequence=[
+            "preexperiment_intro",
+            "binary_choice_game",
+            "questionnaire",
+            "empty_app",
+        ],
         num_demo_participants=1,
         question_params_file="parameters_13Mar2022.csv",
         treatment="NoR",

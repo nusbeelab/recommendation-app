@@ -1,5 +1,5 @@
 from typing import Callable, List, Type
-from otree.api import Page, Bot, expect
+from otree.api import Page, Bot, expect, Submission
 
 from preexperiment_intro import (
     C,
@@ -10,6 +10,7 @@ from preexperiment_intro import (
     UnderstandingTesting2,
     UnderstandingTesting3,
     WelcomePage,
+    WrongAnsPage,
 )
 
 
@@ -78,6 +79,7 @@ class PlayerBot(Bot):
                 "in",
                 self.html,
             )
+            yield Submission(WrongAnsPage, check_html=False)
             return
 
         yield UnderstandingTesting2
@@ -88,6 +90,7 @@ class PlayerBot(Bot):
                 "in",
                 self.html,
             )
+            yield Submission(WrongAnsPage, check_html=False)
             return
 
         yield UnderstandingTesting3
@@ -98,6 +101,7 @@ class PlayerBot(Bot):
                 "in",
                 self.html,
             )
+            yield Submission(WrongAnsPage, check_html=False)
             return
 
         if self.case == "pass":

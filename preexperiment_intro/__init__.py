@@ -66,6 +66,13 @@ class WrongAnsPage(Page):
     def is_displayed(player: Player):
         return not player.pass_testing_qns
 
+    @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+        try:
+            return upcoming_apps[-1]
+        except:
+            return None
+
 
 page_sequence = [
     ProlificIdPage,
