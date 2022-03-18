@@ -1,14 +1,16 @@
 import logging
-from common import CustomPage
+
+from otree.common import get_app_label_from_import_path
+from otree.api import Page
+
 from binary_choice_game.constants import C
 from binary_choice_game.functions import get_data_export_row
 from binary_choice_game.models import Player, Trial
-from otree.common import get_app_label_from_import_path
 
 from recommendation_data_toolbox.lottery import Lottery
 
 
-class GamePage(CustomPage):
+class GamePage(Page):
     def get_template_name(self):
         if self.template_name is not None:
             return self.template_name

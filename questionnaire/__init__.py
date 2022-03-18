@@ -5,10 +5,8 @@ from otree.api import (
     BasePlayer,
     models,
     widgets,
+    Page,
 )
-
-from common import CustomPage, set_qualified_participant_if_none
-
 
 GENDER_CHOICES = [[False, "Male"], [True, "Female"]]
 AGE_CHOICES = [
@@ -123,98 +121,88 @@ class Player(BasePlayer):
     )
 
 
-def creating_session(subsession: Subsession):
-    for player in subsession.get_players():
-        set_qualified_participant_if_none(player)
-
-
-class Gender(CustomPage):
+class Gender(Page):
     form_model = "player"
     form_fields = ["gender"]
 
 
-class Age(CustomPage):
+class Age(Page):
     form_model = "player"
     form_fields = ["age"]
 
 
-class Race(CustomPage):
+class Race(Page):
     @staticmethod
     def live_method(player: Player, race: str):
         player.race = race
         print(player.race)
 
 
-class Nationality(CustomPage):
+class Nationality(Page):
     @staticmethod
     def live_method(player: Player, nationality: str):
         player.nationality = nationality
         print(player.nationality)
 
 
-class EducationLevel(CustomPage):
+class EducationLevel(Page):
     form_model = "player"
     form_fields = ["education_level"]
 
 
-class EmploymentStatus(CustomPage):
+class EmploymentStatus(Page):
     form_model = "player"
     form_fields = ["employment_status"]
 
 
-class MaritalStatus(CustomPage):
+class MaritalStatus(Page):
     form_model = "player"
     form_fields = ["marital_status"]
 
 
-class ChildrenNum(CustomPage):
+class ChildrenNum(Page):
     form_model = "player"
     form_fields = ["children_num"]
 
 
-class ChildSex(CustomPage):
+class ChildSex(Page):
     form_model = "player"
     form_fields = ["child_sex"]
 
     @staticmethod
     def is_displayed(player: Player):
-        return (
-            super(CustomPage, CustomPage).is_displayed(player)
-            and player.children_num == CHILDREN_NUM_CHOICES[1]
-        )
+        return player.children_num == CHILDREN_NUM_CHOICES[1]
 
 
-class ChildrenSex(CustomPage):
+class ChildrenSex(Page):
     form_model = "player"
     form_fields = ["children_sex"]
 
     @staticmethod
     def is_displayed(player: Player):
-        return super(CustomPage, CustomPage).is_displayed(
-            player
-        ) and player.children_num in [
+        return player.children_num in [
             CHILDREN_NUM_CHOICES[i] for i in range(2, len(CHILDREN_NUM_CHOICES))
         ]
 
 
-class Religion(CustomPage):
+class Religion(Page):
     @staticmethod
     def live_method(player: Player, religion: str):
         player.religion = religion
         print(player.religion)
 
 
-class AiAwareness(CustomPage):
+class AiAwareness(Page):
     form_model = "player"
     form_fields = ["ai_awareness"]
 
 
-class AiOpinion(CustomPage):
+class AiOpinion(Page):
     form_model = "player"
     form_fields = ["ai_opinion"]
 
 
-class Finish(CustomPage):
+class Finish(Page):
     pass
 
 

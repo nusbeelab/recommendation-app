@@ -8,7 +8,6 @@ from binary_choice_game.utils import (
     timestamp2utcdatetime,
     try_else_none,
 )
-from common import set_qualified_participant_if_none
 
 
 def generate_random_problem_id_list():
@@ -24,7 +23,6 @@ def creating_session(subsession: Subsession):
 
     try:
         for player in subsession.get_players():
-            set_qualified_participant_if_none(player)
             player.treatment = (
                 treatment if treatment in C.TREATMENTS else random.choice(C.TREATMENTS)
             )
