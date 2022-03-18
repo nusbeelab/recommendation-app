@@ -10,20 +10,18 @@ from binary_choice_game.utils import (
 )
 
 
-def generate_random_problem_id_list():
-    stages = list(C.QUESTION_DF["stage"].unique())
-    df = C.QUESTION_DF.sample(frac=1)
-    return [id for stage in stages for id in df["id"][df["stage"] == stage]]
+def generate_random_problem_id_list(stage: int):
+    return C.QUESTIONS_DF_BY_STAGE[stage]["id"].sample(frac=1).to_list()
 
 
 def creating_session(subsession: Subsession):
     logger = logging.getLogger(__name__)
-    treatment = subsession.session.config.get("name")
+    treatment = subsession.session.config.get("treatment")
     logger.info(f"Session treatment: {treatment}")
 
     try:
         for player in subsession.get_players():
-            player.treatment = (
+            player.participant.treatment = (
                 treatment if treatment in C.TREATMENTS else random.choice(C.TREATMENTS)
             )
             for id in generate_random_problem_id_list():
@@ -34,7 +32,8 @@ def creating_session(subsession: Subsession):
 
 def get_data_export_row(player: Player, trial: Trial):
     try:
-        df_row = C.QUESTION_DF[C.QUESTION_DF["id"] == trial.problem_id].iloc[0]
+        qns_df = C.QUESTIONS_DF_BY_STAGE[player.round_number]
+        df_row = qns_df[qns_df["id"] == trial.problem_id].iloc[0]
         params_from_df = df_row[
             [
                 "stage",

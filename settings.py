@@ -7,6 +7,7 @@ SESSION_CONFIGS = [
         app_sequence=["preexperiment_intro", "binary_choice_game", "questionnaire"],
         num_demo_participants=1,
         question_params_file="parameters_13Mar2022.csv",
+        treatment="NoR",
     ),
     dict(
         name="preexperiment_intro",
@@ -20,6 +21,7 @@ SESSION_CONFIGS = [
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
         question_params_file="parameters_13Mar2022.csv",
+        treatment="NoR",
     ),
     dict(
         name="preexperiment_questionnaire",
