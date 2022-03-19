@@ -1,6 +1,6 @@
 import logging
 import random
-from typing import Iterable
+from typing import Iterable, Literal, Optional
 from binary_choice_game import C
 from binary_choice_game.models import Player, Subsession, Trial
 from binary_choice_game.utils import (
@@ -30,6 +30,16 @@ def creating_session(subsession: Subsession):
         logger.error(err)
 
 
+def get_response(button: Optional[Literal["L", "R"]], left_option: bool):
+    if button == None:
+        return None
+    if button == "L":
+        return left_option
+    if button == "R":
+        return not left_option
+    raise ValueError("Value of button must be 'L' or 'R' or None")
+
+
 def get_data_export_row(player: Player, trial: Trial):
     try:
         qns_df = C.QUESTIONS_DF_BY_STAGE[player.round_number]
@@ -52,7 +62,7 @@ def get_data_export_row(player: Player, trial: Trial):
                 "pb3",
             ]
         ]
-        response = trial.left_option if trial.button == "L" else not trial.left_option
+        response = get_response(trial.button, trial.left_option)
         start_timestamp_ms = int(trial.start_str_timestamp_ms or 0)
         end_timestamp_ms = int(trial.end_str_timestamp_ms or 0)
         return (
@@ -64,6 +74,7 @@ def get_data_export_row(player: Player, trial: Trial):
             ]
             + list(params_from_df)
             + [
+                trial.left_option,
                 trial.rec,
                 trial.button,
                 response,
