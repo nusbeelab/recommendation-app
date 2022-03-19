@@ -203,7 +203,9 @@ class AiOpinion(Page):
 
 
 class Finish(Page):
-    pass
+    @staticmethod
+    def before_next_page(player: Player, _):
+        player.participant.finished = True
 
 
 page_sequence = [
