@@ -23,7 +23,10 @@
 
 ### Export data
 
-To export experimental data with all the information needed for the project, visit https://nus-recommendation-project.herokuapp.com/export and locate the line with the phrase "custom export". Then click on the hyperlinks located on the same line to download the data, either as an excel file ("Excel") or a csv file ("Plain").
+Data collected by the oTree app can be exported at https://nus-recommendation-project.herokuapp.com/export.
+
+- For responses to binary choice questions, use the "custom export" option to export the data.
+- For the rest, use the default export.
 
 ## Local development
 
