@@ -77,6 +77,7 @@ class C(BaseConstants):
         "pb2",
         "xb3",
         "pb3",
+        "left_option",
         "recommendation",
         "button",
         "response",
