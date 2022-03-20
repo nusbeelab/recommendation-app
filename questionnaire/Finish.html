@@ -1,13 +1,21 @@
 {% extends "global/Page.html" %}
 {% load otree %}
 
+{{ block style }}
+<style>
+  mark {
+    background-color: yellow;
+    color: black;
+  }
+</style>
+{{ endblock }}
+
 {{ block content }}
 <p>You have finished our experiment. Thanks for your participation.</p>
 {{ if "prolific_completion_url" in session.vars and session.prolific_completion_url }}
 <p>Click <a href="{{ session.prolific_completion_url }}">here</a>
   to complete the study.</p>
 {{ else }}
-<p>Your survey ID is {{ participant.code }}. Please report this ID in Prolific.</p>
-{{ next_button }}
+<p>Your survey ID is <mark>{{ participant.code }}</mark>. Please report this ID in Prolific.</p>
 {{ endif }}
 {{ endblock }}
