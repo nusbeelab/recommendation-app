@@ -3,4 +3,4 @@ otree==5.7.2
 psycopg2>=2.8.4
 pandas==1.4.1
 sentry-sdk>=0.7.9
-git+https://github.com/nusbeelab/recommendation-data-toolbox.git@main#egg=recommendation-data-toolbox
+git+https://github.com/nusbeelab/recommendation-data-toolbox.git@0.0.1#egg=recommendation-data-toolbox
