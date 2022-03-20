@@ -1,0 +1,86 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block understanding_testing_styles %}
+<style>
+  .qn-container {
+    margin-bottom: 2rem;
+  }
+</style>
+{% endblock %}
+
+{% block understanding_testing_scripts %}
+<script>
+  const form = document.getElementById("form");
+  const choice0 = document.getElementById("choice0");
+  const choice1 = document.getElementById("choice1");
+  const choice2 = document.getElementById("choice2");
+  const choice3 = document.getElementById("choice3");
+  const nextButton = document.querySelector('.otree-btn-next');
+
+  function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  }
+
+  let isWarningShown = false;
+  function createWarning() {
+    const warning = document.createElement("p");
+    warning.innerText = "Your answer is not correct. Please try again.";
+    warning.style.color = "red";
+    return warning;
+  }
+
+  function showWarning() {
+    console.log("showing warning");
+    insertAfter(createWarning(), form);
+  }
+
+  console.log(js_vars.qn_status);
+  if (js_vars.qn_status === "fail_1") {
+    showWarning();
+  }
+
+  function checkIsAnsCorrect(correctCheckedValues) {
+    return (choice0.checked === correctCheckedValues[0] &&
+      choice1.checked === correctCheckedValues[1] &&
+      choice2.checked === correctCheckedValues[2] &&
+      choice3.checked == correctCheckedValues[3]);
+  }
+
+  function addFormValidation(correctCheckedValues) {
+    form.addEventListener("submit", (evt) => {
+      if (js_vars.qn_status === "fail_2") {
+        return;
+      }
+
+      isCorrect = checkIsAnsCorrect(correctCheckedValues);
+
+      if (isCorrect) {
+        liveSend("pass");
+      } else if (js_vars.qn_status === "unanswered") {
+        liveSend("fail_1");
+        js_vars.qn_status = "fail_1";
+        showWarning();
+        evt.preventDefault();
+        nextButton.disabled = true;
+      } else if (js_vars.qn_status === "fail_1") {
+        liveSend("fail_2");
+        js_vars.qn_status = "fail_2";
+      }
+    });
+  }
+
+  function countCheckedChoices() {
+    return [choice0, choice1, choice2, choice3].reduce((prev, cur) => prev + cur.checked, 0);
+  }
+
+  function handleChoiceChange() {
+    nextButton.disabled = countCheckedChoices() != 2;
+  }
+
+  [choice0, choice1, choice2, choice3].forEach((c) => c.addEventListener('change', handleChoiceChange));
+  handleChoiceChange()
+
+
+</script>
+{% endblock %}
