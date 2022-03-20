@@ -10,7 +10,6 @@ from preexperiment_intro import (
     UnderstandingTesting2,
     UnderstandingTesting3,
     WelcomePage,
-    WrongAnsPage,
 )
 
 

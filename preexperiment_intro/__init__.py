@@ -22,8 +22,11 @@ QN_STATUSES = ["unanswered", "fail_1", "fail_2", "pass"]
 class Player(BasePlayer):
     prolific_id = models.StringField()
     qn_1_status = models.StringField(choices=QN_STATUSES, initial=QN_STATUSES[0])
+    qn_1_num_tries = models.IntegerField(initial=0)
     qn_2_status = models.StringField(choices=QN_STATUSES, initial=QN_STATUSES[0])
+    qn_2_num_tries = models.IntegerField(initial=0)
     qn_3_status = models.StringField(choices=QN_STATUSES, initial=QN_STATUSES[0])
+    qn_3_num_tries = models.IntegerField(initial=0)
 
 
 def is_player_not_failing(player: Player):
@@ -55,10 +58,23 @@ class RewardIntroPage(CustomPage):
     pass
 
 
+def get_qn_num_tries(old_qn_status):
+    if old_qn_status == "unanswered":
+        return 1
+    if old_qn_status == "fail_1":
+        return 2
+    return None
+
+
 def get_live_method(qn_num: Literal[1, 2, 3]):
     def live_method(player: Player, qn_status: str):
         qn_status_attr = f"qn_{qn_num}_status"
+        qn_num_tries_attr = f"qn_{qn_num}_num_tries"
+
+        old_qn_status = getattr(player, qn_status_attr)
         setattr(player, qn_status_attr, qn_status)
+
+        setattr(player, qn_num_tries_attr, get_qn_num_tries(old_qn_status))
 
     return live_method
 
