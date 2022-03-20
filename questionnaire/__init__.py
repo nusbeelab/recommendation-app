@@ -1,3 +1,4 @@
+import logging
 from otree.api import (
     BaseConstants,
     BaseSubsession,
@@ -7,6 +8,9 @@ from otree.api import (
     widgets,
     Page,
 )
+
+logging.config.fileConfig("logging.conf")
+
 
 GENDER_CHOICES = [[False, "Male"], [True, "Female"]]
 AGE_CHOICES = [
@@ -70,7 +74,7 @@ AI_OPINION_CHOICES = [
     "Extremely harmful",
     "Slightly harmful",
     "Neutral",
-    "Slight helpful",
+    "Slightly helpful",
     "Extremely helpful",
 ]
 
@@ -134,15 +138,27 @@ class Age(Page):
 class Race(Page):
     @staticmethod
     def live_method(player: Player, race: str):
-        player.race = race
-        print(player.race)
+        logger = logging.getLogger(__name__)
+        try:
+            player.race = race
+            logger.info(f"Participant {player.participant.code}'s race: {player.race}")
+        except Exception as err:
+            logger.error(err)
+            raise err
 
 
 class Nationality(Page):
     @staticmethod
     def live_method(player: Player, nationality: str):
-        player.nationality = nationality
-        print(player.nationality)
+        logger = logging.getLogger(__name__)
+        try:
+            player.nationality = nationality
+            logger.info(
+                f"Participant {player.participant.code}'s nationality: {player.nationality}"
+            )
+        except Exception as err:
+            logger.error(err)
+            raise err
 
 
 class EducationLevel(Page):
@@ -188,8 +204,15 @@ class ChildrenSex(Page):
 class Religion(Page):
     @staticmethod
     def live_method(player: Player, religion: str):
-        player.religion = religion
-        print(player.religion)
+        logger = logging.getLogger(__name__)
+        try:
+            player.religion = religion
+            logger.info(
+                f"Participant {player.participant.code}'s religion: {player.religion}"
+            )
+        except Exception as err:
+            logger.error(err)
+            raise err
 
 
 class AiAwareness(Page):
@@ -204,8 +227,12 @@ class AiOpinion(Page):
 
 class Finish(Page):
     @staticmethod
-    def before_next_page(player: Player, _):
-        player.participant.finished = True
+    def before_next_page(player: Player, timeout_happened):
+        try:
+            player.participant.finished = True
+        except Exception as err:
+            logging.getLogger(__name__).error(err)
+            raise err
 
 
 page_sequence = [
