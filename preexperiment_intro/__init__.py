@@ -1,5 +1,8 @@
-from typing import Literal, Optional
+import logging
+from typing import Literal
 from otree.api import BaseConstants, BaseSubsession, BaseGroup, BasePlayer, models, Page
+
+logging.config.fileConfig("logging.conf")
 
 
 class C(BaseConstants):
@@ -67,21 +70,33 @@ def get_qn_num_tries(old_qn_status):
 
 
 def get_live_method(qn_num: Literal[1, 2, 3]):
-    def live_method(player: Player, qn_status: str):
+    def live_method(player: Player, data: dict):
+        logger = logging.getLogger(__name__)
+
         qn_status_attr = f"qn_{qn_num}_status"
         qn_num_tries_attr = f"qn_{qn_num}_num_tries"
-
         old_qn_status = getattr(player, qn_status_attr)
-        setattr(player, qn_status_attr, qn_status)
+        qn_num_tries = get_qn_num_tries(old_qn_status)
 
-        setattr(player, qn_num_tries_attr, get_qn_num_tries(old_qn_status))
+        logger.info(
+            f"Participant {player.participant.code}, understanding testing question {qn_num}, number of tries: {qn_num_tries}, data received from client: {data}."
+        )
+
+        setattr(player, qn_status_attr, data.get("status"))
+        setattr(player, qn_num_tries_attr, qn_num_tries)
 
     return live_method
 
 
 def get_js_vars(qn_num: Literal[1, 2, 3]):
     def js_vars(player: Player):
-        return dict(qn_status=getattr(player, f"qn_{qn_num}_status"))
+        logger = logging.getLogger(__name__)
+
+        qn_status = getattr(player, f"qn_{qn_num}_status")
+        logger.info(
+            f"Participant {player.participant.code}, understanding testing question {qn_num}, question status sent to client: {qn_status}."
+        )
+        return dict(qn_status=qn_status)
 
     return js_vars
 
@@ -115,7 +130,7 @@ class WrongAnsPage(Page):
 
 
 page_sequence = [
-    ProlificIdPage,
+    # ProlificIdPage,
     WelcomePage,
     QnIntroPage,
     RewardIntroPage,

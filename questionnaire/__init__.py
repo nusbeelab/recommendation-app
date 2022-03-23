@@ -129,10 +129,20 @@ class Gender(Page):
     form_model = "player"
     form_fields = ["gender"]
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(f"Participant {player.participant.code}'s gender: {player.gender}.")
+
 
 class Age(Page):
     form_model = "player"
     form_fields = ["age"]
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(f"Participant {player.participant.code}'s age: {player.age}.")
 
 
 class Race(Page):
@@ -141,7 +151,7 @@ class Race(Page):
         logger = logging.getLogger(__name__)
         try:
             player.race = race
-            logger.info(f"Participant {player.participant.code}'s race: {player.race}")
+            logger.info(f"Participant {player.participant.code}'s race: {player.race}.")
         except Exception as err:
             logger.error(err)
             raise err
@@ -154,7 +164,7 @@ class Nationality(Page):
         try:
             player.nationality = nationality
             logger.info(
-                f"Participant {player.participant.code}'s nationality: {player.nationality}"
+                f"Participant {player.participant.code}'s nationality: {player.nationality}."
             )
         except Exception as err:
             logger.error(err)
@@ -165,20 +175,48 @@ class EducationLevel(Page):
     form_model = "player"
     form_fields = ["education_level"]
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s education level: {player.education_level}."
+        )
+
 
 class EmploymentStatus(Page):
     form_model = "player"
     form_fields = ["employment_status"]
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s employment status: {player.employment_status}."
+        )
 
 
 class MaritalStatus(Page):
     form_model = "player"
     form_fields = ["marital_status"]
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s marital status: {player.marital_status}."
+        )
+
 
 class ChildrenNum(Page):
     form_model = "player"
     form_fields = ["children_num"]
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s number of children: {player.children_num}."
+        )
 
 
 class ChildSex(Page):
@@ -188,6 +226,13 @@ class ChildSex(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.children_num == CHILDREN_NUM_CHOICES[1]
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}, sex of their only child: {player.child_sex}."
+        )
 
 
 class ChildrenSex(Page):
@@ -200,6 +245,13 @@ class ChildrenSex(Page):
             CHILDREN_NUM_CHOICES[i] for i in range(2, len(CHILDREN_NUM_CHOICES))
         ]
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}, sex of their children: {player.children_sex}."
+        )
+
 
 class Religion(Page):
     @staticmethod
@@ -208,7 +260,7 @@ class Religion(Page):
         try:
             player.religion = religion
             logger.info(
-                f"Participant {player.participant.code}'s religion: {player.religion}"
+                f"Participant {player.participant.code}'s religion: {player.religion}."
             )
         except Exception as err:
             logger.error(err)
@@ -219,10 +271,24 @@ class AiAwareness(Page):
     form_model = "player"
     form_fields = ["ai_awareness"]
 
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s awareness of AI: {player.ai_awareness}."
+        )
+
 
 class AiOpinion(Page):
     form_model = "player"
     form_fields = ["ai_opinion"]
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s opinion of AI: {player.ai_opinion}."
+        )
 
 
 class Finish(Page):

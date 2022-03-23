@@ -4,14 +4,14 @@
 
 ### Run the experiment with Prolific
 
-1. Create a session on our oTree site, specifying an appropriate number of participants.
-
-1. On oTree HR, add our oTree site. This requires specifying the site's url i.e.
+1. (If the oTree site has not been added to oTree HR) On oTree HR, add our oTree site. This requires specifying the site's url i.e.
    `https://nus-recommendation-project.herokuapp.com` and the config variable `OTREE_REST_KEY` as set on Heroku.
 
-1. After the oTree site has been added, click on the hyperlink that reads "Prolific". This brings us to the "Prolific configuration" page for our oTree site.
+1. Create a session on our oTree site, specifying an appropriate number of participants.
 
-1. Add the session code obtained from step 1 here.
+1. On oTree HR, click the "Prolific" hyperlink associated with our oTree site. Here, add the session code that was created in the previous step.
+
+1. Click the "Configure" hyperlink associated with the added session.
 
 1. Enter the following URL (exactly) into Prolific as the URL of the study.
 
@@ -19,7 +19,7 @@
    https://otree-hr.herokuapp.com/redirect_prolific/404/?PROLIFIC_PID={{%PROLIFIC_PID%}}&STUDY_ID={{%STUDY_ID%}}&SESSION_ID={{%SESSION_ID%}}
    ```
 
-1. Identify the completion URL of the study as provided by Prolific. Return to the Prolific configuration page on oTree HR and update the completion URL.
+1. Identify the completion URL of the study as provided by Prolific. Return to the Prolific configuration page of the current session on oTree HR and update the completion URL.
 
 ### Export data
 
