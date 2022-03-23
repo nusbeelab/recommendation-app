@@ -9,7 +9,7 @@ from binary_choice_game.models import (
 from binary_choice_game.functions import creating_session, custom_export
 from binary_choice_game.views import page_sequence
 
-logging.config.fileConfig('logging.conf')
+logging.config.fileConfig("logging.conf")
 
 doc = """
 Binary choice questions
