@@ -23,7 +23,6 @@ QN_STATUSES = ["unanswered", "fail_1", "fail_2", "pass"]
 
 
 class Player(BasePlayer):
-    prolific_id = models.StringField()
     qn_1_status = models.StringField(choices=QN_STATUSES, initial=QN_STATUSES[0])
     qn_1_num_tries = models.IntegerField(initial=0)
     qn_2_status = models.StringField(choices=QN_STATUSES, initial=QN_STATUSES[0])
