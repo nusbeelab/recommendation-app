@@ -22,7 +22,6 @@
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
 
-  let isWarningShown = false;
   function createWarning() {
     const warning = document.createElement("p");
     warning.innerText = "Your answer is not correct. Please try again.";
@@ -31,20 +30,20 @@
   }
 
   function showWarning() {
-    console.log("showing warning");
     insertAfter(createWarning(), form);
   }
 
-  console.log(js_vars.qn_status);
   if (js_vars.qn_status === "fail_1") {
     showWarning();
   }
 
-  function checkIsAnsCorrect(correctCheckedValues) {
-    return (choice0.checked === correctCheckedValues[0] &&
-      choice1.checked === correctCheckedValues[1] &&
-      choice2.checked === correctCheckedValues[2] &&
-      choice3.checked == correctCheckedValues[3]);
+  function getChoices() {
+    return [choice0.checked, choice1.checked, choice2.checked, choice3.checked];
+  }
+
+  function areArraysEqual(array1, array2) {
+    return array1.length === array2.length &&
+      array1.every((value, index) => value === array2[index]);
   }
 
   function addFormValidation(correctCheckedValues) {
@@ -53,18 +52,19 @@
         return;
       }
 
-      isCorrect = checkIsAnsCorrect(correctCheckedValues);
+      choices = getChoices();
+      isCorrect = areArraysEqual(correctCheckedValues, choices);
 
       if (isCorrect) {
-        liveSend("pass");
+        liveSend({ choices, status: "pass" });
       } else if (js_vars.qn_status === "unanswered") {
-        liveSend("fail_1");
+        liveSend({ choices, status: "fail_1" });
         js_vars.qn_status = "fail_1";
         showWarning();
         evt.preventDefault();
         nextButton.disabled = true;
       } else if (js_vars.qn_status === "fail_1") {
-        liveSend("fail_2");
+        liveSend({ choices, status: "fail_2" });
         js_vars.qn_status = "fail_2";
       }
     });

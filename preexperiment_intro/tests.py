@@ -15,7 +15,7 @@ from preexperiment_intro import (
 
 class PlayerBot(Bot):
     def play_round(self):
-        yield ProlificIdPage, dict(prolific_id="test_prolific_id")
+        # yield ProlificIdPage, dict(prolific_id="test_prolific_id")
         yield WelcomePage
         yield QnIntroPage
         yield RewardIntroPage
@@ -23,4 +23,4 @@ class PlayerBot(Bot):
         yield UnderstandingTesting2
         yield UnderstandingTesting3
 
-        expect(self.player.prolific_id, "test_prolific_id")
+        # expect(self.player.prolific_id, "test_prolific_id")
