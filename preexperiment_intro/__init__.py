@@ -9,6 +9,11 @@ class C(BaseConstants):
     NAME_IN_URL = "intro"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
+    UT_ANS = {
+        1: (True, False, False, True),
+        2: (False, True, True, False),
+        3: (False, True, False, True),
+    }
 
 
 class Subsession(BaseSubsession):
@@ -60,29 +65,48 @@ class RewardIntroPage(CustomPage):
     pass
 
 
-def get_qn_num_tries(old_qn_status):
+def get_qn_num_tries(old_qn_status: str):
     if old_qn_status == "unanswered":
         return 1
     if old_qn_status == "fail_1":
         return 2
-    return None
+    raise ValueError()
+
+
+def get_next_qn_status(is_correct: bool, old_qn_status: str):
+    if old_qn_status == "fail_2":
+        return "fail_2"
+    if is_correct:
+        return "pass"
+    if old_qn_status == "unanswered":
+        return "fail_1"
+    if old_qn_status == "fail_1":
+        return "fail_2"
+    raise ValueError()
 
 
 def get_live_method(qn_num: Literal[1, 2, 3]):
     def live_method(player: Player, data: dict):
         logger = logging.getLogger(__name__)
+        try:
+            qn_status_attr = f"qn_{qn_num}_status"
+            qn_num_tries_attr = f"qn_{qn_num}_num_tries"
+            old_qn_status = getattr(player, qn_status_attr)
+            qn_num_tries = get_qn_num_tries(old_qn_status)
 
-        qn_status_attr = f"qn_{qn_num}_status"
-        qn_num_tries_attr = f"qn_{qn_num}_num_tries"
-        old_qn_status = getattr(player, qn_status_attr)
-        qn_num_tries = get_qn_num_tries(old_qn_status)
+            logger.info(
+                f"Participant {player.participant.code}, understanding testing question {qn_num}, number of tries: {qn_num_tries}, data received from client: {data}."
+            )
 
-        logger.info(
-            f"Participant {player.participant.code}, understanding testing question {qn_num}, number of tries: {qn_num_tries}, data received from client: {data}."
-        )
+            is_correct = tuple(data.get("choices")) == C.UT_ANS[qn_num]
+            new_qn_status = get_next_qn_status(is_correct, old_qn_status)
+            setattr(player, qn_status_attr, new_qn_status)
+            setattr(player, qn_num_tries_attr, qn_num_tries)
+            return {player.id_in_group: dict(success=True, status=new_qn_status)}
 
-        setattr(player, qn_status_attr, data.get("status"))
-        setattr(player, qn_num_tries_attr, qn_num_tries)
+        except Exception as err:
+            logger.error(err)
+            return {player.id_in_group: dict(success=False)}
 
     return live_method
 
