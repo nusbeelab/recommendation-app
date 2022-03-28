@@ -41,33 +41,33 @@
     return [choice0.checked, choice1.checked, choice2.checked, choice3.checked];
   }
 
-  function areArraysEqual(array1, array2) {
-    return array1.length === array2.length &&
-      array1.every((value, index) => value === array2[index]);
-  }
+  form.addEventListener("submit", (evt) => {
+    evt.preventDefault();
 
-  function addFormValidation(correctCheckedValues) {
-    form.addEventListener("submit", (evt) => {
-      if (js_vars.qn_status === "fail_2") {
-        return;
-      }
+    if (js_vars.qn_status === "fail_2") {
+      form.submit();
+    }
 
-      choices = getChoices();
-      isCorrect = areArraysEqual(correctCheckedValues, choices);
+    choices = getChoices();
+    liveSend({ choices });
+  });
 
-      if (isCorrect) {
-        liveSend({ choices, status: "pass" });
-      } else if (js_vars.qn_status === "unanswered") {
-        liveSend({ choices, status: "fail_1" });
+  function liveRecv(data) {
+    if (!data.success) {
+
+    } else {
+      if (data.status === "pass") {
+        form.submit();
+      } else if (data.status === "fail_1") {
         js_vars.qn_status = "fail_1";
         showWarning();
-        evt.preventDefault();
         nextButton.disabled = true;
-      } else if (js_vars.qn_status === "fail_1") {
-        liveSend({ choices, status: "fail_2" });
-        js_vars.qn_status = "fail_2";
+      } else if (data.status === "fail_2") {
+        form.submit();
+      } else {
+
       }
-    });
+    }
   }
 
   function countCheckedChoices() {
