@@ -21,6 +21,8 @@ def creating_session(subsession: Subsession):
 
     try:
         for player in subsession.get_players():
+            for id in generate_random_problem_id_list(player.round_number):
+                Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
             player.participant.treatment = (
                 treatment if treatment in C.TREATMENTS else random.choice(C.TREATMENTS)
             )

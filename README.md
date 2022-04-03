@@ -71,7 +71,7 @@ Data collected by the oTree app can be exported at https://nus-recommendation-pr
 1. Install dependencies for development.
 
    ```
-   pip3 install -r requirements-dev.txt
+   pip3 install -r requirements.txt
    ```
 
 1. To check that everything has been properly set up, start the development server.

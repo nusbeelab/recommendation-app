@@ -4,15 +4,10 @@ from otree.common import get_app_label_from_import_path
 from otree.api import Page
 
 from binary_choice_game.constants import C
-from binary_choice_game.functions import (
-    generate_random_problem_id_list,
-    get_data_export_row,
-)
+from binary_choice_game.functions import get_data_export_row
 from binary_choice_game.models import Player, Trial
 
 from recommendation_data_toolbox.lottery import Lottery
-
-from binary_choice_game.utils import get_rand_bool
 
 
 class GamePage(Page):
@@ -26,11 +21,6 @@ class GamePage(Page):
 
 
 class StartPage(GamePage):
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        for id in generate_random_problem_id_list(player.round_number):
-            Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
-
     @staticmethod
     def js_vars(player: Player):
         return dict(round_number=player.round_number)
@@ -83,11 +73,9 @@ class QnPage(GamePage):
             # give recommendations here
             trial.rec = None
 
-            lottery_pair = C.LOT_PAIR_MANAGER.convert_ids_to_lottery_pairs(
-                [trial.problem_id]
-            )[0]
-            left_option = unpack_lottery(lottery_pair.a)
-            right_option = unpack_lottery(lottery_pair.b)
+            problem = C.PROBLEM_MANAGER.convert_ids_to_problems([trial.problem_id])[0]
+            left_option = unpack_lottery(problem.a)
+            right_option = unpack_lottery(problem.b)
             if trial.left_option == 1:
                 left_option, right_option = right_option, left_option
 
