@@ -1,14 +1,13 @@
 import json
 import os
-from typing import Any, Dict
-import typing
-import numpy as np
-from otree.api import BaseConstants
 import pandas as pd
+
+from typing import Any, Dict
+
+from otree.api import BaseConstants
 
 from recommendation_data_toolbox.lottery import get_problem_manager
 
-from binary_choice_game.recommendations import Treatment
 from settings import QUESTIONS_CSV_FILE
 
 config_filepath = os.path.join(
@@ -28,7 +27,7 @@ def get_num_trials_by_stage(dfs: Dict[Any, pd.DataFrame]):
     return {k: len(v) for k, v in dfs.items()}
 
 
-def read_rec_algo_desc() -> Dict[Treatment, str]:
+def read_rec_algo_desc() -> Dict[str, str]:
     filepath = os.path.join(config_filepath, "rec_algo_desc.json")
     with open(filepath, "r") as f:
         return {k: v for k, v in json.load(f).items()}
@@ -42,7 +41,7 @@ class C(BaseConstants):
     PROBLEM_MANAGER = get_problem_manager(pd.concat(QUESTIONS_DF_BY_STAGE.values()))
     NUM_TRIALS_BY_STAGE = get_num_trials_by_stage(QUESTIONS_DF_BY_STAGE)
     REC_ALGO_DESC = read_rec_algo_desc()
-    TREATMENTS = typing.get_args(Treatment)
+    PREEXPERIMENT_RATING_MATRIX = (None,)
     DATA_EXPORT_HEADERS = [
         "session_code",
         "participant_code",

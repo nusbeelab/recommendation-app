@@ -16,7 +16,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    treatment = models.StringField()
     num_completed = models.IntegerField(initial=0)
 
 

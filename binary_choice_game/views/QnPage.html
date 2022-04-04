@@ -50,15 +50,15 @@
         <div class="options">
             <div id="left-option" class="option">
                 <table></table>
-                <!-- <div class="rec" style="display: none;">
-                        This option is recommended for you
-                    </div> -->
+                <div class="rec" style="display: none;">
+                    This option is recommended for you
+                </div>
             </div>
             <div id="right-option" class="option">
                 <table></table>
-                <!-- <div class="rec" style="display: none;">
-                        This option is recommended for you
-                    </div> -->
+                <div class="rec" style="display: none;">
+                    This option is recommended for you
+                </div>
             </div>
         </div>
         <div class="qn-btns">
@@ -103,8 +103,8 @@
         end_timestamp_ms = Date.now();
         show(loading);
         hide(content);
-        // hide(leftOptionRec);
-        // hide(rightOptionRec)
+        hide(leftOptionRec);
+        hide(rightOptionRec);
         liveSend({
             button,
             start_timestamp_ms,
@@ -113,17 +113,19 @@
     }
 
     function liveRecv(data) {
+        console.log("hello");
+        console.log(data);
         if (data.is_finished) {
             document.getElementById("form").submit();
         } else {
             progressBar.style.width = `${data.progress * 100}%`;
             updateTable(leftOptionTable, data.left_option);
             updateTable(rightOptionTable, data.right_option);
-            // if (data.rec === true) {
-            //     show(rightOptionRec);
-            // } else if (data.rec === false) {
-            //     show(leftOptionRec);
-            // }
+            if (data.rec === true) {
+                show(rightOptionRec);
+            } else if (data.rec === false) {
+                show(leftOptionRec);
+            }
             start_timestamp_ms = Date.now();
             show(content);
             hide(loading);
@@ -131,6 +133,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        console.log("loaded");
         liveSend({});
     });
 
