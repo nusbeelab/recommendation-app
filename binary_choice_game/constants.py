@@ -6,7 +6,7 @@ import numpy as np
 from otree.api import BaseConstants
 import pandas as pd
 
-from recommendation_data_toolbox.lottery import Lottery, LotteryPair, LotteryPairManager
+from recommendation_data_toolbox.lottery import get_problem_manager
 
 from binary_choice_game.recommendations import Treatment
 from settings import QUESTIONS_CSV_FILE
@@ -24,21 +24,6 @@ def read_qns_by_stage() -> Dict[int, pd.DataFrame]:
     )
 
 
-def map_question_param_to_lot_pair(row: pd.Series):
-    lot_a = Lottery(
-        np.array(row[["xa1", "xa2", "xa3"]]), np.array(row[["pa1", "pa2", "pa3"]])
-    )
-    lot_b = Lottery(
-        np.array(row[["xb1", "xb2", "xb3"]]), np.array(row[["pb1", "pb2", "pb3"]])
-    )
-    return LotteryPair(lot_a, lot_b)
-
-
-def get_lot_pair_manager(df: pd.DataFrame):
-    lot_pairs = list(df.apply(map_question_param_to_lot_pair, axis=1))
-    return LotteryPairManager(lot_pairs=lot_pairs)
-
-
 def get_num_trials_by_stage(dfs: Dict[Any, pd.DataFrame]):
     return {k: len(v) for k, v in dfs.items()}
 
@@ -54,7 +39,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 3
     QUESTIONS_DF_BY_STAGE = read_qns_by_stage()
-    LOT_PAIR_MANAGER = get_lot_pair_manager(pd.concat(QUESTIONS_DF_BY_STAGE.values()))
+    PROBLEM_MANAGER = get_problem_manager(pd.concat(QUESTIONS_DF_BY_STAGE.values()))
     NUM_TRIALS_BY_STAGE = get_num_trials_by_stage(QUESTIONS_DF_BY_STAGE)
     REC_ALGO_DESC = read_rec_algo_desc()
     TREATMENTS = typing.get_args(Treatment)

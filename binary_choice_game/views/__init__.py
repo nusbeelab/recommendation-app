@@ -45,8 +45,10 @@ def is_finished(player: Player):
 
 
 def unpack_lottery(lot: Lottery):
+    # convert int and float to str to ensure that the data can be serialized
     return [
-        dict(oc=oc, p=prob) for oc, prob in zip(lot.objective_consequences, lot.probs)
+        dict(oc=str(oc), p=str(prob))
+        for oc, prob in zip(lot.objective_consequences, lot.probs)
     ]
 
 
@@ -83,12 +85,10 @@ class QnPage(GamePage):
             # give recommendations here
             trial.rec = None
 
-            lottery_pair = C.LOT_PAIR_MANAGER.convert_ids_to_lottery_pairs(
-                [trial.problem_id]
-            )[0]
-            left_option = unpack_lottery(lottery_pair.a)
-            right_option = unpack_lottery(lottery_pair.b)
-            if trial.left_option == 1:
+            problem = C.PROBLEM_MANAGER.convert_ids_to_problems([trial.problem_id])[0]
+            left_option = unpack_lottery(problem.a)
+            right_option = unpack_lottery(problem.b)
+            if trial.left_option:
                 left_option, right_option = right_option, left_option
 
             next_trial_data = {
@@ -106,6 +106,7 @@ class QnPage(GamePage):
 
             return next_trial_data
         except Exception as err:
+            logger.info("wtf")
             logger.error(err)
             raise err
 
