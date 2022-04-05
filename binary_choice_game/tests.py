@@ -5,7 +5,7 @@ from binary_choice_game.constants import C
 from binary_choice_game.models import Player, Trial
 from binary_choice_game.utils import get_rand_bool
 
-from binary_choice_game.views import QnPage, StartPage
+from binary_choice_game.views import QnPage, StartPage, Stg2IntroPage
 
 
 def get_mock_input_data(num_trials: int):
@@ -66,6 +66,9 @@ class PlayerBot(Bot):
             raise Exception("There should only be three rounds.")
 
         yield StartPage
+
+        if self.round_number == 2:
+            yield Stg2IntroPage
 
         yield Submission(QnPage, check_html=False)
         trials = Trial.filter(player=self.player)
