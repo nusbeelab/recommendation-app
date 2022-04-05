@@ -1,28 +1,15 @@
 import logging
 import random
 
-from typing import Dict, Type
-import numpy as np
-
 from otree.common import get_app_label_from_import_path
 from otree.api import Page
 
 from recommendation_data_toolbox.lottery import Lottery
-from recommendation_data_toolbox.rec import (
-    Recommender,
-    NoneRecommender,
-    RandomRecommender,
-    MostPopularChoiceRecommender,
-)
-from recommendation_data_toolbox.rec.content_based import (
-    ContentBasedRandomForestRecommender,
-)
-from recommendation_data_toolbox.rec.cf.neighborhood_based import UbcfRecommender
 
-from binary_choice_game.utils import get_response
 from binary_choice_game.constants import C
 from binary_choice_game.functions import get_data_export_row
 from binary_choice_game.models import Player, Trial
+from binary_choice_game.views.RecommenderStore import RecommenderStore
 
 
 class GamePage(Page):
@@ -35,16 +22,7 @@ class GamePage(Page):
         )
 
 
-def get_round1_response_data(player: Player):
-    trials = Trial.filter(player=player.in_round(1))
-    problem_ids = np.array([trial.problem_id for trial in trials])
-    decisions = np.array(
-        [get_response(trial.button, trial.left_option) for trial in trials]
-    )
-    return problem_ids, decisions
-
-
-RECOMMENDERS: Dict[str, Type[Recommender]] = dict()
+recommenderStore = RecommenderStore()
 
 
 class StartPage(GamePage):
@@ -59,41 +37,15 @@ class StartPage(GamePage):
                     f"Participant {player.participant.code} is assigned treatment {player.participant.treatment}"
                 )
             elif player.round_number == 2:
-                treatment = player.participant.treatment
-                if treatment == "NoR":
-                    RECOMMENDERS[player.participant.code] = NoneRecommender()
-                elif treatment == "R_Random":
-                    RECOMMENDERS[player.participant.code] = RandomRecommender()
-                elif treatment == "R_Maj":
-                    RECOMMENDERS[
-                        player.participant.code
-                    ] = MostPopularChoiceRecommender()
-                elif treatment == "R_CBF":
-                    problem_ids, decisions = get_round1_response_data(player)
-                    RECOMMENDERS[
-                        player.participant.code
-                    ] = ContentBasedRandomForestRecommender(
-                        problem_manager=C.PROBLEM_MANAGER,
-                        subj_problem_ids=problem_ids,
-                        subj_decisions=decisions,
-                    )
-                elif treatment == "R_CF":
-                    problem_ids, decisions = get_round1_response_data(player)
-                    RECOMMENDERS[player.participant.code] = UbcfRecommender(
-                        rating_matrix=C.PREEXPERIMENT_RATING_MATRIX,
-                        subj_problem_ids=problem_ids,
-                        subj_decisions=decisions,
-                    )
-                else:
-                    raise ValueError()
+                recommenderStore.intialize_recommender(player)
                 logger.info(
-                    f"{type(RECOMMENDERS[player.participant.code]).__name__} has been initialized for participant {player.participant.code}"
+                    f"{type(recommenderStore.get_recommender(player)).__name__} has been initialized for participant {player.participant.code}"
                 )
             if player.round_number in [2, 3]:
                 problem_ids = C.QUESTIONS_DF_BY_STAGE[player.round_number][
                     "id"
                 ].to_numpy()
-                recs = RECOMMENDERS[player.participant.code].rec(problem_ids)
+                recs = recommenderStore.get_recommender(player).rec(problem_ids)
                 logger.info(
                     f"Participant {player.participant.code} is given the following recommendations for problems {problem_ids}: {recs}"
                 )
@@ -109,6 +61,12 @@ class StartPage(GamePage):
     @staticmethod
     def js_vars(player: Player):
         return dict(round_number=player.round_number)
+
+
+class Stg2IntroPage(GamePage):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 2
 
 
 def get_current_trial(player: Player):
@@ -200,7 +158,7 @@ class EndPage(GamePage):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         if player.round_number == 3:
-            del RECOMMENDERS[player.participant.code]
+            recommenderStore.remove_recommender(player)
 
 
 class Results(GamePage):
@@ -229,6 +187,7 @@ class Results(GamePage):
 
 PRE_EXPERIMENT_SEQ = [
     StartPage,
+    Stg2IntroPage,
     QnPage,
     EndPage,
     # Results,

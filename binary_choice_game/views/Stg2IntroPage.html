@@ -1,0 +1,66 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block content }}
+{{ if player.participant.treatment == "NoR" }}
+<p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
+  question.</p>
+{{ elif player.participant.treatment == "R_Random" }}
+<p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
+  question.</p>
+<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
+<p>The recommendation is generated randomly.</p>
+<ul>
+  <li>For each question, the system will randomly pick one out of the two options and recommend the option to you.
+  </li>
+  <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
+</ul>
+{{ elif player.participant.treatment == "R_Maj" }}
+<p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
+  question.</p>
+<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
+<p>The recommendation is generated based on the most popular choices in a previous study.</p>
+<ul>
+  <li>In a previous study, we recruited a US representative sample from Prolific and asked participants to answer the
+    same
+    questions as in the current study.
+  </li>
+  <li>For each question, the system will pick the option that most subjects chose in the previous study and recommend it
+    to
+    you.</li>
+  <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
+</ul>
+{{ elif player.participant.treatment == "R_CF" }}
+<p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
+  question.</p>
+<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
+<p>The recommendation is generated based on decisions from participants who are similar to you.</p>
+<ul>
+  <li>In a previous study, we recruited a US representative sample from Prolific and asked participants to answer the
+    same
+    questions as in the current study.
+  </li>
+  <li>Based on your choices in Part 1, the system will identify a group of participants who had made similar decisions
+    as
+    you.</li>
+  <li>For each question in Part 2, the system will recommend an option to you according to similar participants'
+    decisions
+    in this question.</li>
+  <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
+</ul>
+{{ elif player.participant.treatment == "R_CBF" }}
+<p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
+  question.</p>
+<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
+<p>The recommendation is generated based on how you made your decisions in Part 1.</p>
+<ul>
+  <li>Based on your choices in Part 1, the system detects some features that are important to you when you made the
+    decisions.
+  </li>
+  <li>For each question in Part 2, the system will base on these important features and recommend an option to you.
+  </li>
+  <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
+</ul>
+{{ endif }}
+{{ next_button }}
+{{ endblock }}
