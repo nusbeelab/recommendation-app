@@ -1,7 +1,7 @@
 import logging
-import random
-from typing import Iterable, Literal, Optional
+from typing import Iterable
 from binary_choice_game import C
+from binary_choice_game.utils import get_response
 from binary_choice_game.models import Player, Subsession, Trial
 from binary_choice_game.utils import (
     get_rand_bool,
@@ -15,27 +15,12 @@ def generate_random_problem_id_list(stage: int):
 
 
 def creating_session(subsession: Subsession):
-    logger = logging.getLogger(__name__)
-    treatment = subsession.session.config.get("treatment")
-    logger.info(f"Session treatment: {treatment}")
-
     try:
         for player in subsession.get_players():
-            player.participant.treatment = (
-                treatment if treatment in C.TREATMENTS else random.choice(C.TREATMENTS)
-            )
+            for id in generate_random_problem_id_list(player.round_number):
+                Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
     except Exception as err:
-        logger.error(err)
-
-
-def get_response(button: Optional[Literal["L", "R"]], left_option: bool):
-    if button == None:
-        return None
-    if button == "L":
-        return left_option
-    if button == "R":
-        return not left_option
-    raise ValueError("Value of button must be 'L' or 'R' or None")
+        logging.getLogger(__name__).error(err)
 
 
 def get_data_export_row(player: Player, trial: Trial):
@@ -67,7 +52,7 @@ def get_data_export_row(player: Player, trial: Trial):
             [
                 player.session.code,
                 player.participant.code,
-                player.treatment,
+                player.participant.treatment,
                 trial.problem_id,
             ]
             + list(params_from_df)

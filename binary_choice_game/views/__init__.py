@@ -1,18 +1,28 @@
 import logging
+import random
+
+from typing import Dict, Type
+import numpy as np
 
 from otree.common import get_app_label_from_import_path
 from otree.api import Page
 
-from binary_choice_game.constants import C
-from binary_choice_game.functions import (
-    generate_random_problem_id_list,
-    get_data_export_row,
-)
-from binary_choice_game.models import Player, Trial
-
 from recommendation_data_toolbox.lottery import Lottery
+from recommendation_data_toolbox.rec import (
+    Recommender,
+    NoneRecommender,
+    RandomRecommender,
+    MostPopularChoiceRecommender,
+)
+from recommendation_data_toolbox.rec.content_based import (
+    ContentBasedRandomForestRecommender,
+)
+from recommendation_data_toolbox.rec.cf.neighborhood_based import UbcfRecommender
 
-from binary_choice_game.utils import get_rand_bool
+from binary_choice_game.utils import get_response
+from binary_choice_game.constants import C
+from binary_choice_game.functions import get_data_export_row
+from binary_choice_game.models import Player, Trial
 
 
 class GamePage(Page):
@@ -25,11 +35,76 @@ class GamePage(Page):
         )
 
 
+def get_round1_response_data(player: Player):
+    trials = Trial.filter(player=player.in_round(1))
+    problem_ids = np.array([trial.problem_id for trial in trials])
+    decisions = np.array(
+        [get_response(trial.button, trial.left_option) for trial in trials]
+    )
+    return problem_ids, decisions
+
+
+RECOMMENDERS: Dict[str, Type[Recommender]] = dict()
+
+
 class StartPage(GamePage):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        for id in generate_random_problem_id_list(player.round_number):
-            Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
+        logger = logging.getLogger(__name__)
+        try:
+            if player.round_number == 1:
+                treatments = player.session.config.get("treatments")
+                player.participant.treatment = random.choice(treatments)
+                logger.info(
+                    f"Participant {player.participant.code} is assigned treatment {player.participant.treatment}"
+                )
+            elif player.round_number == 2:
+                treatment = player.participant.treatment
+                if treatment == "NoR":
+                    RECOMMENDERS[player.participant.code] = NoneRecommender()
+                elif treatment == "R_Random":
+                    RECOMMENDERS[player.participant.code] = RandomRecommender()
+                elif treatment == "R_Maj":
+                    RECOMMENDERS[
+                        player.participant.code
+                    ] = MostPopularChoiceRecommender()
+                elif treatment == "R_CBF":
+                    problem_ids, decisions = get_round1_response_data(player)
+                    RECOMMENDERS[
+                        player.participant.code
+                    ] = ContentBasedRandomForestRecommender(
+                        problem_manager=C.PROBLEM_MANAGER,
+                        subj_problem_ids=problem_ids,
+                        subj_decisions=decisions,
+                    )
+                elif treatment == "R_CF":
+                    problem_ids, decisions = get_round1_response_data(player)
+                    RECOMMENDERS[player.participant.code] = UbcfRecommender(
+                        rating_matrix=C.PREEXPERIMENT_RATING_MATRIX,
+                        subj_problem_ids=problem_ids,
+                        subj_decisions=decisions,
+                    )
+                else:
+                    raise ValueError()
+                logger.info(
+                    f"{type(RECOMMENDERS[player.participant.code]).__name__} has been initialized for participant {player.participant.code}"
+                )
+            if player.round_number in [2, 3]:
+                problem_ids = C.QUESTIONS_DF_BY_STAGE[player.round_number][
+                    "id"
+                ].to_numpy()
+                recs = RECOMMENDERS[player.participant.code].rec(problem_ids)
+                logger.info(
+                    f"Participant {player.participant.code} is given the following recommendations for problems {problem_ids}: {recs}"
+                )
+                trials = Trial.filter(player=player)
+                for problem_id, rec in zip(problem_ids, recs):
+                    trial = next(
+                        trial for trial in trials if trial.problem_id == problem_id
+                    )
+                    trial.rec = rec
+        except Exception as err:
+            logger.error(err)
 
     @staticmethod
     def js_vars(player: Player):
@@ -56,14 +131,16 @@ class QnPage(GamePage):
     @staticmethod
     def live_method(player: Player, data: dict):
         logger = logging.getLogger(__name__)
-        logger.info(f"Received data from player {player.id_in_group}: {data}.")
+        logger.info(f"Received data from player {player.participant.code}: {data}.")
         try:
             if is_finished(player):
-                logger.info(f"Player {player.id_in_group} has finished.")
+                logger.info(f"Player {player.participant.code} has finished.")
                 return {player.id_in_group: dict(is_finished=True)}
 
             if data:
-                logger.info(f"Getting current trial for player {player.id_in_group}.")
+                logger.info(
+                    f"Getting current trial for player {player.participant.code}."
+                )
                 trial = get_current_trial(player)
                 logger.info(f"Current trial: {trial}.")
 
@@ -75,38 +152,40 @@ class QnPage(GamePage):
                 logger.info(f"Recorded trial: {trial}")
 
             if is_finished(player):
-                logger.info(f"Player {player.id_in_group} has finished.")
+                logger.info(f"Player {player.participant.code} has finished.")
                 return {player.id_in_group: dict(is_finished=True)}
 
-            logger.info(f"Getting next trial for player {player.id_in_group}.")
+            logger.info(f"Getting next trial for player {player.participant.code}.")
             trial = get_current_trial(player)
             logger.info(f"Next trial: {trial}")
-
-            # give recommendations here
-            trial.rec = None
 
             problem = C.PROBLEM_MANAGER.convert_ids_to_problems([trial.problem_id])[0]
             left_option = unpack_lottery(problem.a)
             right_option = unpack_lottery(problem.b)
             if trial.left_option:
                 left_option, right_option = right_option, left_option
-
+            rec = (
+                None
+                if trial.rec is None
+                else "L"
+                if trial.rec == trial.left_option
+                else "R"
+            )
             next_trial_data = {
                 player.id_in_group: dict(
                     left_option=left_option,
                     right_option=right_option,
-                    rec=trial.rec,
+                    rec=rec,
                     progress=player.num_completed
                     / C.NUM_TRIALS_BY_STAGE[player.round_number],
                 )
             }
             logger.info(
-                f"Next trial data for player {player.id_in_group}: {next_trial_data}"
+                f"Next trial data for player {player.participant.code}: {next_trial_data}"
             )
 
             return next_trial_data
         except Exception as err:
-            logger.info("wtf")
             logger.error(err)
             raise err
 
@@ -117,6 +196,11 @@ class EndPage(GamePage):
         return (
             super(GamePage, GamePage).is_displayed(player) and player.round_number == 3
         )
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if player.round_number == 3:
+            del RECOMMENDERS[player.participant.code]
 
 
 class Results(GamePage):

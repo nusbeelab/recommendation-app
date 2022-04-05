@@ -44,14 +44,6 @@ def call_live_method(
 
 class PlayerBot(Bot):
     def play_round(self):
-        treatment = self.session.config.get("treatment")
-        if treatment in C.TREATMENTS:
-            # player is assigned the recommendation algo as configured
-            expect(self.player.participant.treatment, treatment)
-        else:
-            # player is assigned a valid treatment
-            expect(self.player.participant.treatment, "in", C.TREATMENTS)
-
         # text for each round is displayed correctly in html
         if self.round_number == 1:
             expect(
@@ -61,6 +53,10 @@ class PlayerBot(Bot):
             )
             expect("Now you can start Part 1.", "in", self.html)
         elif self.round_number == 2:
+            # participant is assigned a valid treatment
+            treatments = self.session.config.get("treatments")
+            expect(self.player.participant.treatment, "in", treatments)
+
             expect("You have finished Part 1.", "in", self.html)
             expect("Please wait for Part 2 to start.", "in", self.html)
         elif self.round_number == 3:
