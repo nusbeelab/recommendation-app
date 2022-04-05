@@ -1,7 +1,7 @@
 import logging
-from typing import Iterable, Literal, Optional
+from typing import Iterable
 from binary_choice_game import C
-from binary_choice_game.common import get_response
+from binary_choice_game.utils import get_response
 from binary_choice_game.models import Player, Subsession, Trial
 from binary_choice_game.utils import (
     get_rand_bool,
@@ -45,7 +45,7 @@ def get_data_export_row(player: Player, trial: Trial):
                 "pb3",
             ]
         ]
-        response = get_response(trial)
+        response = get_response(trial.button, trial.left_option)
         start_timestamp_ms = int(trial.start_str_timestamp_ms or 0)
         end_timestamp_ms = int(trial.end_str_timestamp_ms or 0)
         return (

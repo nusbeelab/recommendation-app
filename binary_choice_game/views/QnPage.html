@@ -18,6 +18,19 @@
         align-items: center;
     }
 
+    #rec-container {
+        width: 100%;
+        margin-top: 1rem;
+        display: flex;
+    }
+
+    .rec {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
     #progress-bar-container {
         display: flex;
         align-items: center;
@@ -50,15 +63,9 @@
         <div class="options">
             <div id="left-option" class="option">
                 <table></table>
-                <div class="rec" style="display: none;">
-                    This option is recommended for you
-                </div>
             </div>
             <div id="right-option" class="option">
                 <table></table>
-                <div class="rec" style="display: none;">
-                    This option is recommended for you
-                </div>
             </div>
         </div>
         <div class="qn-btns">
@@ -67,6 +74,14 @@
             </div>
             <div class="qn-btn-container">
                 <div class="qn-btn" onclick="sendResponse('R')">B</div>
+            </div>
+        </div>
+        <div id="rec-container">
+            <div class="left rec">
+                <div class="text" style="display: none;">This option is recommended for you</div>
+            </div>
+            <div class="right rec">
+                <div class="text" style="display: none;">This option is recommended for you</div>
             </div>
         </div>
     </div>
@@ -87,8 +102,8 @@
     const rightOption = document.getElementById("right-option");
     const leftOptionTable = leftOption.querySelector("table");
     const rightOptionTable = rightOption.querySelector("table");
-    const leftOptionRec = leftOption.querySelector(".rec");
-    const rightOptionRec = rightOption.querySelector(".rec");
+    const leftOptionRecText = document.querySelector(".left.rec .text");
+    const rightOptionRecText = document.querySelector(".right.rec .text");
     const progressBar = document.getElementById("progress-fill");
 
     function show(elem) {
@@ -103,8 +118,8 @@
         end_timestamp_ms = Date.now();
         show(loading);
         hide(content);
-        hide(leftOptionRec);
-        hide(rightOptionRec);
+        hide(leftOptionRecText);
+        hide(rightOptionRecText);
         liveSend({
             button,
             start_timestamp_ms,
@@ -113,7 +128,6 @@
     }
 
     function liveRecv(data) {
-        console.log("hello");
         console.log(data);
         if (data.is_finished) {
             document.getElementById("form").submit();
@@ -121,10 +135,10 @@
             progressBar.style.width = `${data.progress * 100}%`;
             updateTable(leftOptionTable, data.left_option);
             updateTable(rightOptionTable, data.right_option);
-            if (data.rec === true) {
-                show(rightOptionRec);
-            } else if (data.rec === false) {
-                show(leftOptionRec);
+            if (data.rec === "L") {
+                show(leftOptionRecText);
+            } else if (data.rec === "R") {
+                show(rightOptionRecText);
             }
             start_timestamp_ms = Date.now();
             show(content);
@@ -133,7 +147,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("loaded");
         liveSend({});
     });
 
