@@ -1,4 +1,4 @@
 otree==5.7.2
 pandas==1.4.1
 requests==2.27.1
-git+https://github.com/nusbeelab/recommendation-data-toolbox.git@0.0.2#egg=recommendation-data-toolbox
+git+https://github.com/nusbeelab/recommendation-data-toolbox.git@0.0.4#egg=recommendation-data-toolbox
