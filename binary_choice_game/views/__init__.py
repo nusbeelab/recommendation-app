@@ -57,6 +57,7 @@ class StartPage(GamePage):
                     trial.rec = rec
         except Exception as err:
             logger.error(err)
+            raise err
 
     @staticmethod
     def js_vars(player: Player):

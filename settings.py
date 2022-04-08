@@ -36,13 +36,13 @@ SESSION_CONFIGS = [
         num_demo_participants=1,
         treatments=["R_Maj"],
     ),
-    # dict(
-    #     name="game_R_CF",
-    #     display_name="Problems, R_CF",
-    #     app_sequence=["binary_choice_game"],
-    #     num_demo_participants=1,
-    #     treatments=["R_CF"],
-    # ),
+    dict(
+        name="game_R_CF",
+        display_name="Problems, R_CF",
+        app_sequence=["binary_choice_game"],
+        num_demo_participants=1,
+        treatments=["R_CF"],
+    ),
     dict(
         name="game_R_CBF",
         display_name="Problems, R_CBF",

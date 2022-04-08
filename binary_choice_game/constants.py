@@ -46,7 +46,9 @@ def convert_subj_data_to_rating_vector(subj_df: pd.DataFrame):
 def get_preexperiment_rating_matrix():
     df = pd.read_csv(os.path.join(resources_filepath, "preexperiment_data.csv"))
     assert len(df) == 180 * 446
-    return df.groupby("participant_code").apply(convert_subj_data_to_rating_vector)
+    return (
+        df.groupby("participant_code").apply(convert_subj_data_to_rating_vector).values
+    )
 
 
 class C(BaseConstants):
