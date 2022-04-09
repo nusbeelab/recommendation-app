@@ -13,6 +13,7 @@ SESSION_CONFIGS = [
             "empty_app",
         ],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["NoR", "R_Random", "R_CF", "R_CBF"],
     ),
     dict(
@@ -20,6 +21,7 @@ SESSION_CONFIGS = [
         display_name="Problems, NoR",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["NoR"],
     ),
     dict(
@@ -27,6 +29,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_Random",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_Random"],
     ),
     dict(
@@ -34,6 +37,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_Maj",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_Maj"],
     ),
     dict(
@@ -41,6 +45,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_CF",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_CF"],
     ),
     dict(
@@ -48,6 +53,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_CBF",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_CBF"],
     ),
     dict(

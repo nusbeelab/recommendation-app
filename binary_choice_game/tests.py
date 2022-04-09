@@ -68,7 +68,7 @@ class PlayerBot(Bot):
 
         yield StartPage
 
-        if self.round_number == 2:
+        if self.session.config.get("mode") == "experiment" and self.round_number == 2:
             yield Stg2IntroPage
 
         yield Submission(QnPage, check_html=False)
