@@ -65,3 +65,6 @@ class RecommenderStore:
 
     def remove_recommender(self, player: Player):
         self.store.pop(player.participant.code, None)
+
+
+recommenderStore = RecommenderStore()

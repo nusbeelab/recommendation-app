@@ -1,11 +1,12 @@
 import random
 from typing import Callable, Dict, List
+
 from otree.api import Bot, Submission, expect
+
 from binary_choice_game.constants import C
 from binary_choice_game.models import Player, Trial
 from binary_choice_game.utils import get_rand_bool
-
-from binary_choice_game.views import QnPage, StartPage, Stg2IntroPage
+from binary_choice_game.controller import QnPage, StartPage, Stg2IntroPage
 
 
 def get_mock_input_data(num_trials: int):
