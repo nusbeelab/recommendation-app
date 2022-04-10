@@ -4,7 +4,7 @@ from recommendation_data_toolbox.lottery import Lottery
 
 from binary_choice_game.constants import C
 from binary_choice_game.models import Player, Trial
-from binary_choice_game.controller.GamePage import GamePage
+from binary_choice_game.controller.game_page import GamePage
 
 
 def get_current_trial(player: Player):

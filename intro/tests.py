@@ -1,7 +1,7 @@
 from typing import Callable, Type
 from otree.api import Page, Bot, expect, Submission
 
-from preexperiment_intro import (
+from intro import (
     C,
     QnIntroPage,
     RewardIntroPage,

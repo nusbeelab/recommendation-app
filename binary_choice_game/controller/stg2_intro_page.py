@@ -1,5 +1,5 @@
 from binary_choice_game.models import Player
-from binary_choice_game.controller.GamePage import GamePage
+from binary_choice_game.controller.game_page import GamePage
 
 
 class Stg2IntroPage(GamePage):

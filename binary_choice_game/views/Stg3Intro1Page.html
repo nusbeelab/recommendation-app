@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{{ block style }}
+<style>
+  td {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .qn-container {
+    margin-bottom: 2rem;
+  }
+</style>
+{{ endblock }}
+{{ block content }}
+<p>In Part 3, there are 60 questions. In each question, you will be asked to choose between two options of payment.</p>
+<p>Before answering these 60 questions, you will be asked whether to receive recommendations for Part 3 like in Part 2.
+</p>
+
+<div class="qn-container">
+  <div class="options">
+    <div class="option">
+      <table>
+        <tr>
+          <td>Receive recommendations.</td>
+        </tr>
+        <tr>
+          <td>Receive $0.1.</td>
+        </tr>
+      </table>
+    </div>
+    <div class="option">
+      <table>
+        <tr>
+          <td>Receive no recommendations.</td>
+        </tr>
+        <tr>
+          <td>Receive $0.8.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="qn-btns">
+    <div class="qn-btn-container">
+      <div class="qn-btn">A</div>
+    </div>
+    <div class="qn-btn-container">
+      <div class="qn-btn">B</div>
+    </div>
+  </div>
+</div>
+
+<p>
+  Both “Receive recommendations” and “Receive no recommendations” come with an additional monetary payment while amounts
+  can vary. For example, if you choose “Receive recommendations. Receive $0.1.”, you will receive recommendations in
+  Part
+  3 plus an additional USD 0.1. If you choose “Receive no recommendations. Receive $0.8.”, you will NOT receive
+  recommendations in Part 3, BUT you WILL receive USD 0.8.
+</p>
+<p>We will randomly select one of your 13 choices and implement the choice in Part 3. For example, in the randomly
+  chosen
+  one, suppose you choose “Receive recommendations. Receive $0.7”, you will receive recommendations in Part 3 plus an
+  additional USD 0.7. Similarly, you choose “Receive no recommendations. Receive $0.2.”, you will NOT receive
+  recommendations in Part 3, BUT you WILL receive USD 0.2.</p>
+<p>Your best strategy is always to choose what you really prefer for each of the 13 choices.</p>
+{{ next_button }}
+{{ endblock }}

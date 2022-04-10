@@ -1,9 +1,8 @@
 import logging
 
-from binary_choice_game.constants import C
 from binary_choice_game.models import Player, Trial
-from binary_choice_game.functions import get_data_export_row
-from binary_choice_game.controller.GamePage import GamePage
+from binary_choice_game.functions import DATA_EXPORT_HEADERS, get_data_export_row
+from binary_choice_game.controller.game_page import GamePage
 
 
 class Results(GamePage):
@@ -17,7 +16,7 @@ class Results(GamePage):
                 {
                     header: data
                     for header, data in zip(
-                        C.DATA_EXPORT_HEADERS, get_data_export_row(player, trial)
+                        DATA_EXPORT_HEADERS, get_data_export_row(player, trial)
                     )
                 }
                 for trial in trials
