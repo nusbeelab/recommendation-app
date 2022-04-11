@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, Type
 import numpy as np
 
@@ -12,6 +13,7 @@ from recommendation_data_toolbox.rec.content_based import (
 )
 from recommendation_data_toolbox.rec.cf.neighborhood_based import UbcfRecommender
 from binary_choice_game.constants import C
+from binary_choice_game.controller.common import is_assigned_rec_treatment
 
 from binary_choice_game.models import Player, Trial
 from binary_choice_game.utils import get_response
@@ -61,7 +63,37 @@ class RecommenderStore:
     def get_recommender(self, player: Player):
         if player.participant.code not in self.store:
             self.intialize_recommender(player)
+        if (
+            player.round_number == 3
+            and is_assigned_rec_treatment(player)
+            and not player.is_stg3_rec
+        ):
+            return NoneRecommender()
         return self.store[player.participant.code]
 
     def remove_recommender(self, player: Player):
         self.store.pop(player.participant.code, None)
+
+
+recommenderStore = RecommenderStore()
+
+
+def generate_recommendations(player: Player):
+    logger = logging.getLogger(__name__)
+    try:
+        recommenderStore.intialize_recommender(player)
+        logger.info(
+            f"{type(recommenderStore.get_recommender(player)).__name__} has been initialized for participant {player.participant.code}"
+        )
+        problem_ids = C.QUESTIONS_DF_BY_STAGE[player.round_number]["id"].to_numpy()
+        recs = recommenderStore.get_recommender(player).rec(problem_ids)
+        logger.info(
+            f"Participant {player.participant.code} is given the following recommendations for problems {problem_ids}: {recs}"
+        )
+        trials = Trial.filter(player=player)
+        for problem_id, rec in zip(problem_ids, recs):
+            trial = next(trial for trial in trials if trial.problem_id == problem_id)
+            trial.rec = rec
+    except Exception as err:
+        logger.error(err)
+        raise err

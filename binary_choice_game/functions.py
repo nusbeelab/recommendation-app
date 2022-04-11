@@ -2,12 +2,40 @@ import logging
 from typing import Iterable
 from binary_choice_game import C
 from binary_choice_game.utils import get_response
-from binary_choice_game.models import Player, Subsession, Trial
+from binary_choice_game.models import Player, PrefElicitTrial, Subsession, Trial
 from binary_choice_game.utils import (
     get_rand_bool,
     timestamp2utcdatetime,
     try_else_none,
 )
+
+DATA_EXPORT_HEADERS = [
+    "session_code",
+    "participant_code",
+    "treatment",
+    "problem_id",
+    "stage",
+    "problem",
+    "xa1",
+    "pa1",
+    "xa2",
+    "pa2",
+    "xa3",
+    "pa3",
+    "xb1",
+    "pb1",
+    "xb2",
+    "pb2",
+    "xb3",
+    "pb3",
+    "left_option",
+    "recommendation",
+    "button",
+    "response",
+    "utc_start_time",
+    "utc_end_time",
+    "time_spent_ms",
+]
 
 
 def generate_random_problem_id_list(stage: int):
@@ -19,6 +47,8 @@ def creating_session(subsession: Subsession):
         for player in subsession.get_players():
             for id in generate_random_problem_id_list(player.round_number):
                 Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
+            for id in range(1, C.NUM_PREF_ELICIT_TRIALS + 1):
+                PrefElicitTrial.create(player=player, pref_elicit_problem_id=id)
     except Exception as err:
         logging.getLogger(__name__).error(err)
 

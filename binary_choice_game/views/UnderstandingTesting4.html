@@ -1,0 +1,68 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block style }}
+<style>
+  #warning {
+    color: red;
+  }
+</style>
+{{ endblock }}
+
+{{ block content }}
+<p><b>Understanding Testing 3</b></p>
+
+<p>Which of of the following statement is NOT correct?</p>
+
+<form id="form">
+  <input type="radio" id="choice0" name="ut4">
+  <label for="choice0">I will receive recommendation in Part 2.</label><br>
+
+  <input type="radio" id="choice1" name="ut4">
+  <label for="choice1">
+    {{ if player.participant.treatment == "R_Random" }}
+    The recommendation is generated randomly.
+    {{ elif player.participant.treatment == "R_Maj" }}
+    The recommendation is based on the most popular choices in a previous study.
+    {{ elif player.participant.treatment == "R_CF" }}
+    The recommendation is based on decisions from participants who are similar to you.
+    {{ elif player.participant.treatment == "R_CBF" }}
+    The recommendation is based on how you made your decisions in Part 1.
+    {{ endif }}
+  </label><br>
+
+  <input type="radio" id="choice2" name="ut4">
+  <label for="choice2">I can choose whether to follow or not to follow the recommendation for each question.</label><br>
+
+  <input type="radio" id="choice3" name="ut4">
+  <label for="choice3">I will receive no recommendation in Part 2.</label><br>
+  {{ next_button }}
+</form>
+
+<p id="warning" style="display: none;">Your answer is not correct. Please try again.</p>
+{{ endblock }}
+
+{{ block script }}
+<script>
+  const form = document.getElementById("form");
+  const choice3 = document.getElementById("choice3");
+  const nextButton = document.querySelector('.otree-btn-next');
+  const warning = document.getElementById("warning");
+
+  form.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+
+    if (choice3.checked) {
+      form.submit();
+    } else {
+      warning.style.display = "block";
+    }
+  });
+
+  [choice0, choice1, choice2, choice3].forEach(r => r.addEventListener("change",
+    () => {
+      warning.style.display = "none";
+      nextButton.disabled = false;
+    }));
+</script>
+{{ endblock }}

@@ -8,8 +8,8 @@
 {{ elif player.participant.treatment == "R_Random" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
-<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
-<p>The recommendation is generated randomly.</p>
+<p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
+<p><b>The recommendation is generated randomly.</b></p>
 <ul>
   <li>For each question, the system will randomly pick one out of the two options and recommend the option to you.
   </li>
@@ -18,8 +18,8 @@
 {{ elif player.participant.treatment == "R_Maj" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
-<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
-<p>The recommendation is generated based on the most popular choices in a previous study.</p>
+<p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
+<p><b>The recommendation is based on the most popular choices in a previous study.</b></p>
 <ul>
   <li>In a previous study, we recruited a US representative sample from Prolific and asked participants to answer the
     same
@@ -33,8 +33,8 @@
 {{ elif player.participant.treatment == "R_CF" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
-<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
-<p>The recommendation is generated based on decisions from participants who are similar to you.</p>
+<p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
+<p><b>The recommendation is based on decisions from participants who are similar to you.</b></p>
 <ul>
   <li>In a previous study, we recruited a US representative sample from Prolific and asked participants to answer the
     same
@@ -51,8 +51,8 @@
 {{ elif player.participant.treatment == "R_CBF" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
-<p>The difference in Part 2 is that you will receive a recommendation in each question.</p>
-<p>The recommendation is generated based on how you made your decisions in Part 1.</p>
+<p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
+<p><b>The recommendation is generated based on how you made your decisions in Part 1.</b></p>
 <ul>
   <li>Based on your choices in Part 1, the system detects some features that are important to you when you made the
     decisions.
@@ -62,5 +62,56 @@
   <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
 </ul>
 {{ endif }}
+
+<p>Here is an example:</p>
+
+<div class="qn-container">
+  <div class="options">
+    <div class="option">
+      <table>
+        <tr>
+          <td>50 with certainty</td>
+        </tr>
+      </table>
+    </div>
+    <div class="option">
+      <table>
+        <tr>
+          <td style="text-align: right;">0</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">100</td>
+          <td> with probability </td>
+          <td>0.5</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="qn-btns">
+    <div class="qn-btn-container">
+      <div class="qn-btn">A</div>
+    </div>
+    <div class="qn-btn-container">
+      <div class="qn-btn">B</div>
+    </div>
+  </div>
+  <div id="rec-container">
+    <div class="left rec">
+      <div class="text" style="display: none;">This option is recommended for you</div>
+    </div>
+    <div class="right rec">
+      <div class="text" style="display: none;">This option is recommended for you</div>
+    </div>
+  </div>
+</div>
+
+<ul>
+  <li>The option with the word “Recommended” is the option that the system recommends to you.</li>
+</ul>
+
+
+
 {{ next_button }}
 {{ endblock }}

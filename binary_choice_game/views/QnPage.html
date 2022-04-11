@@ -18,19 +18,6 @@
         align-items: center;
     }
 
-    #rec-container {
-        width: 100%;
-        margin-top: 1rem;
-        display: flex;
-    }
-
-    .rec {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
     #progress-bar-container {
         display: flex;
         align-items: center;
@@ -78,10 +65,10 @@
         </div>
         <div id="rec-container">
             <div class="left rec">
-                <div class="text" style="display: none;">This option is recommended for you</div>
+                <div class="text" style="display: none;">Recommended</div>
             </div>
             <div class="right rec">
-                <div class="text" style="display: none;">This option is recommended for you</div>
+                <div class="text" style="display: none;">Recommended</div>
             </div>
         </div>
     </div>
@@ -128,7 +115,6 @@
     }
 
     function liveRecv(data) {
-        console.log(data);
         if (data.is_finished) {
             document.getElementById("form").submit();
         } else {

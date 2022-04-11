@@ -1,0 +1,26 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block content }}
+{{ if player.is_stg3_rec }}
+<p>Your realized choice is Recommendation, ${{ player.stg3_payment }}.</p>
+<p>In Part 3, you will receive a recommendation for each question. The recommendation is generated
+  {{ if player.participant.treatment == "R_Random" }}
+  randomly
+  {{ elif player.participant.treatment == "R_Maj" }}
+  based on the most popular choices in a previous study
+  {{ elif player.participant.treatment == "R_CF" }}
+  based on decisions from participants who are similar to you
+  {{ elif player.participant.treatment == "R_CBF" }}
+  based on how you made your decisions in Part 1
+  {{ endif }}
+  as in Part 2.
+</p>
+<p>Also, you will receive an additional USD {{ player.stg3_payment }} in your payment.</p>
+{{ else }}
+<p>Your realized choice is No Recommendation, ${{ player.stg3_payment }}.</p>
+<p>In Part 3, you will NOT receive recommendation. You will receive an addition of {{ player.stg3_payment }} in your
+  payment.</p>
+{{ endif }}
+{{ next_button }}
+{{ endblock }}

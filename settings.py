@@ -1,18 +1,20 @@
 from os import environ
 
 QUESTIONS_CSV_FILE = "parameters_20Mar2022.csv"
+PREFERENCE_ELICITATION_CSV_FILE = "preference_elicitation_220403.csv"
 
 SESSION_CONFIGS = [
     dict(
         name="experiment",
         display_name="Experiment",
         app_sequence=[
-            "preexperiment_intro",
+            "intro",
             "binary_choice_game",
             "questionnaire",
             "empty_app",
         ],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["NoR", "R_Random", "R_CF", "R_CBF"],
     ),
     dict(
@@ -20,6 +22,7 @@ SESSION_CONFIGS = [
         display_name="Problems, NoR",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["NoR"],
     ),
     dict(
@@ -27,6 +30,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_Random",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_Random"],
     ),
     dict(
@@ -34,6 +38,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_Maj",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_Maj"],
     ),
     dict(
@@ -41,6 +46,7 @@ SESSION_CONFIGS = [
         display_name="Problems, R_CF",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_CF"],
     ),
     dict(
@@ -48,13 +54,14 @@ SESSION_CONFIGS = [
         display_name="Problems, R_CBF",
         app_sequence=["binary_choice_game"],
         num_demo_participants=1,
+        mode="experiment",
         treatments=["R_CBF"],
     ),
     dict(
         name="preexperiment",
         display_name="Pre-experiment",
         app_sequence=[
-            "preexperiment_intro",
+            "intro",
             "binary_choice_game",
             "questionnaire",
             "empty_app",
@@ -63,9 +70,9 @@ SESSION_CONFIGS = [
         treatments=["NoR"],
     ),
     dict(
-        name="preexperiment_intro",
-        display_name="Pre-experiment Intro",
-        app_sequence=["preexperiment_intro"],
+        name="intro",
+        display_name="Intro",
+        app_sequence=["intro"],
         num_demo_participants=1,
     ),
     dict(
