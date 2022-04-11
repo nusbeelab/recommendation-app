@@ -1,0 +1,14 @@
+elicitation_problem,optionA_recommendation,optionA_payment,optionB_recommendation,optionB_payment
+1,Receive Recommendation,0.1,No Recommendation,1.2
+2,Receive Recommendation,0.1,No Recommendation,1
+3,Receive Recommendation,0.1,No Recommendation,0.8
+4,Receive Recommendation,0.1,No Recommendation,0.6
+5,Receive Recommendation,0.1,No Recommendation,0.4
+6,Receive Recommendation,0.1,No Recommendation,0.2
+7,Receive Recommendation,0.1,No Recommendation,0.1
+8,Receive Recommendation,0.2,No Recommendation,0.1
+9,Receive Recommendation,0.4,No Recommendation,0.1
+10,Receive Recommendation,0.6,No Recommendation,0.1
+11,Receive Recommendation,0.8,No Recommendation,0.1
+12,Receive Recommendation,1,No Recommendation,0.1
+13,Receive Recommendation,1.2,No Recommendation,0.1

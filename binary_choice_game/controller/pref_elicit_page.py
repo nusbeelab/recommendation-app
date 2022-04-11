@@ -1,6 +1,7 @@
 import logging
 import random
 from binary_choice_game.constants import C
+from binary_choice_game.controller.common import is_assigned_rec_treatment
 from binary_choice_game.controller.game_page import GamePage
 
 from binary_choice_game.models import Player, PrefElicitTrial
@@ -20,6 +21,7 @@ class PrefElicitPage(GamePage):
         return (
             player.session.config.get("mode") == "experiment"
             and player.round_number == 3
+            and is_assigned_rec_treatment(player)
         )
 
     @staticmethod
@@ -81,3 +83,12 @@ class PrefElicitPage(GamePage):
         player.realized_pref_elicit_problem_id = (
             random.randrange(C.NUM_PREF_ELICIT_TRIALS) + 1
         )
+        trial = PrefElicitTrial.filter(
+            player=player, pref_elicit_problem_id=player.realized_pref_elicit_problem_id
+        )[0]
+        player.is_stg3_rec = not trial.response
+
+        payment = C.PREFERENCE_ELICITATION_PAYMENTS.get(
+            player.realized_pref_elicit_problem_id
+        )[trial.response]
+        player.stg3_payment = str(payment)

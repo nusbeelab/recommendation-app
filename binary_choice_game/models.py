@@ -19,6 +19,8 @@ class Player(BasePlayer):
     num_completed = models.IntegerField(initial=0)
     num_pref_elicit_completed = models.IntegerField(initial=0)
     realized_pref_elicit_problem_id = models.IntegerField()
+    is_stg3_rec = models.BooleanField()
+    stg3_payment = models.StringField()
 
 
 class Trial(ExtraModel):
