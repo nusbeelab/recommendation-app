@@ -1,0 +1,73 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block style }}
+<style>
+  #ul {
+    margin-top: 2rem;
+  }
+</style>
+{{ endblock }}
+
+{{ block content }}
+<p>SUPPOSE there are 10 new decisions to make. These 10 questions are all taken from the 60 questions in Part 1.
+  There
+  are two ways you can make your decisions.</p>
+<ul>
+  <li>Follow your own decisions in Part 1. That is, the system will implement your decisions in Part 1 for these 10
+    questions.</li>
+  <li>Follow the recommended decisions of the system. That is, the system will generate recommendations as in Part 2,
+    and
+    implement the recommendations as your choices for these 10 questions.</li>
+</ul>
+
+<p>Please choose between these two options.</p>
+<div id="content">
+  <div class=" qn-container">
+    <div class="options">
+      <div id="left-option" class="option">
+        <table>
+          <tr>
+            <td>Follow my own decisions in Part 1</td>
+          </tr>
+          <tr>
+            <td id="left-option-value"></td>
+          </tr>
+        </table>
+      </div>
+      <div id="right-option" class="option">
+        <table>
+          <tr>
+            <td>Follow the recommended decisions of the system.</td>
+          </tr>
+          <tr>
+            <td id="right-option-value"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="qn-btns">
+      <div class="qn-btn-container">
+        <div class="qn-btn" onclick="sendResponse(0)">A</div>
+      </div>
+      <div class="qn-btn-container">
+        <div class="qn-btn" onclick="sendResponse(1)">B</div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ endblock }}
+
+{{ block script }}
+<script>
+  function sendResponse(response) {
+    liveSend({ response });
+  }
+
+  function liveRecv(data) {
+    if (data) {
+      document.getElementById("form").submit();
+    }
+  }
+</script>
+{{ endblock }}
