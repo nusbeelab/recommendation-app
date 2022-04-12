@@ -2,7 +2,7 @@ import logging
 from typing import Iterable
 from binary_choice_game import C
 from binary_choice_game.utils import get_response
-from binary_choice_game.models import Player, PrefElicitTrial, Subsession, Trial
+from binary_choice_game.models import Player, Subsession, Trial
 from binary_choice_game.utils import (
     get_rand_bool,
     timestamp2utcdatetime,
@@ -47,8 +47,6 @@ def creating_session(subsession: Subsession):
         for player in subsession.get_players():
             for id in generate_random_problem_id_list(player.round_number):
                 Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
-            for id in range(1, C.NUM_PREF_ELICIT_TRIALS + 1):
-                PrefElicitTrial.create(player=player, pref_elicit_problem_id=id)
     except Exception as err:
         logging.getLogger(__name__).error(err)
 
@@ -107,7 +105,7 @@ def custom_export(players: Iterable[Player]):
     logger.info("Exporting data.")
 
     # header row
-    yield C.DATA_EXPORT_HEADERS
+    yield DATA_EXPORT_HEADERS
     try:
         for p in players:
             for trial in Trial.filter(player=p):

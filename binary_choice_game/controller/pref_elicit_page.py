@@ -4,15 +4,11 @@ from binary_choice_game.constants import C
 from binary_choice_game.controller.common import is_assigned_rec_treatment
 from binary_choice_game.controller.game_page import GamePage
 
-from binary_choice_game.models import Player, PrefElicitTrial
-
-
-def get_current_pref_elicit_trial(player: Player):
-    return PrefElicitTrial.filter(player=player, response=None)[0]
+from binary_choice_game.models import Player
 
 
 def is_pref_elicit_finished(player: Player):
-    return player.num_pref_elicit_completed >= C.NUM_PREF_ELICIT_TRIALS
+    return player.cur_pref_elicit_problem_id > C.NUM_PREF_ELICIT_TRIALS
 
 
 class PrefElicitPage(GamePage):
@@ -38,15 +34,12 @@ class PrefElicitPage(GamePage):
                 return {player.id_in_group: dict(is_finished=True)}
 
             if data:
-                logger.info(
-                    f"Getting current trial for player {player.participant.code}."
+                setattr(
+                    player,
+                    f"pref_{player.cur_pref_elicit_problem_id}",
+                    data.get("response"),
                 )
-                trial = get_current_pref_elicit_trial(player)
-                logger.info(f"Current trial: {trial}.")
-
-                trial.response = data.get("response")
-                player.num_pref_elicit_completed += 1
-                logger.info(f"Recorded trial: {trial}")
+                player.cur_pref_elicit_problem_id += 1
 
             if is_pref_elicit_finished(player):
                 logger.info(
@@ -55,17 +48,15 @@ class PrefElicitPage(GamePage):
                 return {player.id_in_group: dict(is_finished=True)}
 
             logger.info(f"Getting next trial for player {player.participant.code}.")
-            trial = get_current_pref_elicit_trial(player)
-            logger.info(f"Next preference elicitation trial: {trial}")
             (
                 left_option_value,
                 right_option_value,
-            ) = C.PREFERENCE_ELICITATION_PAYMENTS.get(trial.pref_elicit_problem_id)
+            ) = C.PREFERENCE_ELICITATION_PAYMENTS.get(player.cur_pref_elicit_problem_id)
             next_trial_data = {
                 player.id_in_group: dict(
                     left_option_value=left_option_value,
                     right_option_value=right_option_value,
-                    progress=player.num_pref_elicit_completed
+                    progress=player.cur_pref_elicit_problem_id
                     / C.NUM_PREF_ELICIT_TRIALS,
                 )
             }
@@ -83,12 +74,12 @@ class PrefElicitPage(GamePage):
         player.realized_pref_elicit_problem_id = (
             random.randrange(C.NUM_PREF_ELICIT_TRIALS) + 1
         )
-        trial = PrefElicitTrial.filter(
-            player=player, pref_elicit_problem_id=player.realized_pref_elicit_problem_id
-        )[0]
-        player.is_stg3_rec = not trial.response
+        realized_response = getattr(
+            player, f"pref_{player.realized_pref_elicit_problem_id}"
+        )
+        player.is_stg3_rec = not realized_response
 
         payment = C.PREFERENCE_ELICITATION_PAYMENTS.get(
             player.realized_pref_elicit_problem_id
-        )[trial.response]
+        )[realized_response]
         player.stg3_payment = str(payment)
