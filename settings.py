@@ -10,6 +10,7 @@ SESSION_CONFIGS = [
         app_sequence=[
             "intro",
             "binary_choice_game",
+            "hypothetical_qns",
             "questionnaire",
             "empty_app",
         ],
@@ -58,6 +59,12 @@ SESSION_CONFIGS = [
         treatments=["R_CBF"],
     ),
     dict(
+        name="hypothetical_qns",
+        display_name="Hypothetical questions",
+        app_sequence=["hypothetical_qns"],
+        num_demo_participants=1,
+    ),
+    dict(
         name="preexperiment",
         display_name="Pre-experiment",
         app_sequence=[
@@ -99,7 +106,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ["finished", "treatment"]
+PARTICIPANT_FIELDS = ["finished", "treatment", "qn_rounds"]
 SESSION_FIELDS = ["prolific_completion_url"]
 
 # ISO-639 code
