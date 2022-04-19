@@ -1,5 +1,5 @@
 from binary_choice_game.controller.common import is_assigned_rec_treatment
-from binary_choice_game.controller.recommendation import generate_recommendations
+from binary_choice_game.controller.recommendation import populate_rec_probas
 from binary_choice_game.models import Player
 from binary_choice_game.controller.game_page import GamePage
 
@@ -15,4 +15,4 @@ class RealizedPrefPage(GamePage):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        generate_recommendations(player)
+        populate_rec_probas(player)

@@ -62,9 +62,9 @@ class QnPage(GamePage):
                 left_option, right_option = right_option, left_option
             rec = (
                 None
-                if trial.rec is None
+                if trial.rec_proba is None
                 else "L"
-                if trial.rec == trial.left_option
+                if (trial.rec_proba >= 0.5) == trial.left_option
                 else "R"
             )
             next_trial_data = {

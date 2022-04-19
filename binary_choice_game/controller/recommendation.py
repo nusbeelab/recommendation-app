@@ -78,7 +78,7 @@ class RecommenderStore:
 recommenderStore = RecommenderStore()
 
 
-def generate_recommendations(player: Player):
+def populate_rec_probas(player: Player):
     logger = logging.getLogger(__name__)
     try:
         recommenderStore.intialize_recommender(player)
@@ -86,14 +86,14 @@ def generate_recommendations(player: Player):
             f"{type(recommenderStore.get_recommender(player)).__name__} has been initialized for participant {player.participant.code}"
         )
         problem_ids = C.QUESTIONS_DF_BY_STAGE[player.round_number]["id"].to_numpy()
-        recs = recommenderStore.get_recommender(player).rec(problem_ids)
+        rec_probas = recommenderStore.get_recommender(player).rec_proba(problem_ids)
         logger.info(
-            f"Participant {player.participant.code} is given the following recommendations for problems {problem_ids}: {recs}"
+            f"Participant {player.participant.code} is given the following recommendations for problems {problem_ids}: {rec_probas}"
         )
         trials = Trial.filter(player=player)
-        for problem_id, rec in zip(problem_ids, recs):
+        for problem_id, rec_proba in zip(problem_ids, rec_probas):
             trial = next(trial for trial in trials if trial.problem_id == problem_id)
-            trial.rec = rec
+            trial.rec_proba = rec_proba
     except Exception as err:
         logger.error(err)
         raise err
