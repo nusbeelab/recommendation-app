@@ -5,8 +5,9 @@ from otree.api import Bot, Submission, expect, Page
 
 from binary_choice_game.constants import C
 from binary_choice_game.controller.pref_elicit_page import PrefElicitPage
-from binary_choice_game.controller.stg3_intro_page import Stg3IntroPage
+from binary_choice_game.controller.stg3_intro_page1 import Stg3IntroPage1
 from binary_choice_game.controller.realized_pref_page import RealizedPrefPage
+from binary_choice_game.controller.stg3_intro_page2 import Stg3IntroPage2
 from binary_choice_game.controller.understanding_testing_4 import UnderstandingTesting4
 from binary_choice_game.models import Player, Trial
 from binary_choice_game.utils import get_rand_bool
@@ -97,13 +98,14 @@ class PlayerBot(Bot):
                 ]:
                     yield UnderstandingTesting4
             elif self.round_number == 3:
-                yield Stg3IntroPage
+                yield Stg3IntroPage1
                 if self.participant.treatment in [
                     "R_Random",
                     "R_Maj",
                     "R_CF",
                     "R_CBF",
                 ]:
+                    yield Stg3IntroPage2
                     yield Submission(PrefElicitPage, check_html=False)
                     yield RealizedPrefPage
 

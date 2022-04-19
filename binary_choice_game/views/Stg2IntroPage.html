@@ -25,7 +25,8 @@
     same
     questions as in the current study.
   </li>
-  <li>For each question, the system will pick the option that most subjects chose in the previous study and recommend it
+  <li>For each question, the system will pick the option that most participants chose in the previous study and
+    recommend it
     to
     you.</li>
   <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
@@ -100,17 +101,22 @@
   </div>
   <div id="rec-container">
     <div class="left rec">
-      <div class="text" style="display: none;">This option is recommended for you</div>
+      <div class="text">Recommended</div>
     </div>
     <div class="right rec">
-      <div class="text" style="display: none;">This option is recommended for you</div>
+      <div class="text" style="display: none;">Recommended</div>
     </div>
   </div>
 </div>
 
+<br />
 <ul>
   <li>The option with the word “Recommended” is the option that the system recommends to you.</li>
 </ul>
+
+<p>Before your start Part 2, you will answer one understanding testing question. You can try multiple times but will
+  only
+  be able to proceed when you answer correctly.</p>
 {{ endif }}
 
 {{ next_button }}
