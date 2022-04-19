@@ -17,26 +17,6 @@
         justify-content: center;
         align-items: center;
     }
-
-    #progress-bar-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 4rem;
-    }
-
-    #progress-bar {
-        width: max(60%, 40rem);
-        background-color: lightgrey;
-        border-radius: 0.4rem;
-    }
-
-    #progress-fill {
-        width: 1%;
-        height: 0.8rem;
-        background-color: #52a552;
-        border-radius: 0.4rem;
-    }
 </style>
 {{ endblock }}
 
@@ -143,16 +123,23 @@
                 .insertCell()
                 .appendChild(document.createTextNode(`${data[0].oc} with certainty`));
         } else {
-            for (const dataRow of data) {
+            if (data.length === 1) {
                 const row = table.insertRow();
-                ocCell = row.insertCell();
-                ocCell.appendChild(document.createTextNode(dataRow.oc));
-                ocCell.style.textAlign = "right";
-                row.insertCell()
-                    .appendChild(document.createTextNode(" with probability "));
-                row.insertCell()
-                    .appendChild(document.createTextNode(dataRow.p));
+                const cell = row.insertCell();
+                cell.appendChild(document.createTextNode(`${data[0].oc} with certainty`));
+            } else {
+                for (const dataRow of data) {
+                    const row = table.insertRow();
+                    const ocCell = row.insertCell();
+                    ocCell.appendChild(document.createTextNode(dataRow.oc));
+                    ocCell.style.textAlign = "right";
+                    row.insertCell()
+                        .appendChild(document.createTextNode(" with probability "));
+                    row.insertCell()
+                        .appendChild(document.createTextNode(dataRow.p));
+                }
             }
+
         }
     }
 

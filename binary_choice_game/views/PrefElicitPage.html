@@ -18,24 +18,13 @@
     align-items: center;
   }
 
-  #progress-bar-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 4rem;
+  td {
+    text-align: center;
+    vertical-align: middle;
   }
 
-  #progress-bar {
-    width: max(60%, 40rem);
-    background-color: lightgrey;
-    border-radius: 0.4rem;
-  }
-
-  #progress-fill {
-    width: 1%;
-    height: 0.8rem;
-    background-color: #52a552;
-    border-radius: 0.4rem;
+  .qn-container {
+    margin-bottom: 2rem;
   }
 </style>
 {{ endblock }}
@@ -114,7 +103,7 @@
     } else {
       progressBar.style.width = `${data.progress * 100}%`;
       leftOptionValue.innerText = `Receive \$${data.left_option_value}.`;
-      rightOptionValue.innerText = `Receive \$${data.right_option_value}`;
+      rightOptionValue.innerText = `Receive \$${data.right_option_value}.`;
       show(content);
       hide(loading);
     }
