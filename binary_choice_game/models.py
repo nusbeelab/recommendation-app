@@ -37,7 +37,7 @@ class Trial(ExtraModel):
     problem_id = models.IntegerField()
     # False (0) corresponds to optionA, True (1) corresponds to optionB
     left_option = models.BooleanField()
-    rec = models.BooleanField()
+    rec_proba = models.FloatField()
     button = models.StringField()
     # use string to store timestamps to avoid psycopg2.errors.NumericValueOutOfRange
     start_str_timestamp_ms = models.StringField()

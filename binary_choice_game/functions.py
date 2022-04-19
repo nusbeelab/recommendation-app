@@ -29,7 +29,7 @@ DATA_EXPORT_HEADERS = [
     "xb3",
     "pb3",
     "left_option",
-    "recommendation",
+    "rec_proba",
     "button",
     "response",
     "utc_start_time",
@@ -86,7 +86,7 @@ def get_data_export_row(player: Player, trial: Trial):
             + list(params_from_df)
             + [
                 trial.left_option,
-                trial.rec,
+                trial.rec_proba,
                 trial.button,
                 response,
                 timestamp2utcdatetime(start_timestamp_ms),
