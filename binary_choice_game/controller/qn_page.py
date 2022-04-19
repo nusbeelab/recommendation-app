@@ -16,10 +16,14 @@ def is_finished(player: Player):
 
 
 def unpack_lottery(lot: Lottery):
-    # convert int and float to str to ensure that the data can be serialized
+    # sort by descending order
+    order = lot.objective_consequences.argsort()[::-1]
+    ocs = lot.objective_consequences[order]
+    probs = lot.probs[order]
     return [
+        # convert int and float to str to ensure that the data can be serialized
         dict(oc=str(oc), p=str(prob))
-        for oc, prob in zip(lot.objective_consequences, lot.probs)
+        for oc, prob in zip(ocs, probs)
     ]
 
 
