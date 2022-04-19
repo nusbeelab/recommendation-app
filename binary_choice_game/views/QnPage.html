@@ -143,16 +143,23 @@
                 .insertCell()
                 .appendChild(document.createTextNode(`${data[0].oc} with certainty`));
         } else {
-            for (const dataRow of data) {
+            if (data.length === 1) {
                 const row = table.insertRow();
-                ocCell = row.insertCell();
-                ocCell.appendChild(document.createTextNode(dataRow.oc));
-                ocCell.style.textAlign = "right";
-                row.insertCell()
-                    .appendChild(document.createTextNode(" with probability "));
-                row.insertCell()
-                    .appendChild(document.createTextNode(dataRow.p));
+                const cell = row.insertCell();
+                cell.appendChild(document.createTextNode(`${data[0].oc} with certainty`));
+            } else {
+                for (const dataRow of data) {
+                    const row = table.insertRow();
+                    const ocCell = row.insertCell();
+                    ocCell.appendChild(document.createTextNode(dataRow.oc));
+                    ocCell.style.textAlign = "right";
+                    row.insertCell()
+                        .appendChild(document.createTextNode(" with probability "));
+                    row.insertCell()
+                        .appendChild(document.createTextNode(dataRow.p));
+                }
             }
+
         }
     }
 
