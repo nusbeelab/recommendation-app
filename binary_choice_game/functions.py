@@ -76,6 +76,7 @@ def get_data_export_row(player: Player, trial: Trial):
         response = get_response(trial.button, trial.left_option)
         start_timestamp_ms = int(trial.start_str_timestamp_ms or 0)
         end_timestamp_ms = int(trial.end_str_timestamp_ms or 0)
+        rec_proba = f"{trial.rec_proba:5f}" if trial.rec_proba is not None else None
         return (
             [
                 player.session.code,
@@ -86,7 +87,7 @@ def get_data_export_row(player: Player, trial: Trial):
             + list(params_from_df)
             + [
                 trial.left_option,
-                trial.rec_proba,
+                rec_proba,
                 trial.button,
                 response,
                 timestamp2utcdatetime(start_timestamp_ms),
