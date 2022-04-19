@@ -1,4 +1,3 @@
-from binary_choice_game.controller.common import is_assigned_rec_treatment
 from binary_choice_game.models import Player
 from binary_choice_game.controller.game_page import GamePage
 
@@ -9,5 +8,4 @@ class Stg2IntroPage(GamePage):
         return (
             player.session.config.get("mode") == "experiment"
             and player.round_number == 2
-            and is_assigned_rec_treatment(player)
         )

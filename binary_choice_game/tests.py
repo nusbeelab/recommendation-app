@@ -86,21 +86,26 @@ class PlayerBot(Bot):
             raise Exception("There should only be three rounds.")
 
         yield StartPage
-        if self.session.config.get(
-            "mode"
-        ) == "experiment" and self.participant.treatment in [
-            "R_Random",
-            "R_Maj",
-            "R_CF",
-            "R_CBF",
-        ]:
+        if self.session.config.get("mode") == "experiment":
             if self.round_number == 2:
                 yield Stg2IntroPage
-                yield UnderstandingTesting4
+                if self.participant.treatment in [
+                    "R_Random",
+                    "R_Maj",
+                    "R_CF",
+                    "R_CBF",
+                ]:
+                    yield UnderstandingTesting4
             elif self.round_number == 3:
                 yield Stg3IntroPage
-                yield Submission(PrefElicitPage, check_html=False)
-                yield RealizedPrefPage
+                if self.participant.treatment in [
+                    "R_Random",
+                    "R_Maj",
+                    "R_CF",
+                    "R_CBF",
+                ]:
+                    yield Submission(PrefElicitPage, check_html=False)
+                    yield RealizedPrefPage
 
         yield Submission(QnPage, check_html=False)
         trials = Trial.filter(player=self.player)

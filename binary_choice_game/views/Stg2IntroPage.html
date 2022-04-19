@@ -63,6 +63,7 @@
 </ul>
 {{ endif }}
 
+{{ if player.participant.treatment != "NoR" }}
 <p>Here is an example:</p>
 
 <div class="qn-container">
@@ -110,8 +111,7 @@
 <ul>
   <li>The option with the word “Recommended” is the option that the system recommends to you.</li>
 </ul>
-
-
+{{ endif }}
 
 {{ next_button }}
 {{ endblock }}

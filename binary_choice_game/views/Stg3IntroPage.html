@@ -13,6 +13,11 @@
 </style>
 {{ endblock }}
 {{ block content }}
+{{ if player.participant.treatment == "NoR" }}
+<p>In Part 3, there are 60 questions. Similar to Part 1 and Part 2, you will be asked to choose between two options in
+  each
+  question.</p>
+{{ else }}
 <p>In Part 3, there are 60 questions. In each question, you will be asked to choose between two options of payment.</p>
 <p>Before answering these 60 questions, you will be asked whether to receive recommendations for Part 3 like in Part 2.
 </p>
@@ -63,5 +68,6 @@
   additional USD 0.7. Similarly, you choose “Receive no recommendations. Receive $0.2.”, you will NOT receive
   recommendations in Part 3, BUT you WILL receive USD 0.2.</p>
 <p>Your best strategy is always to choose what you really prefer for each of the 13 choices.</p>
+{{ endif }}
 {{ next_button }}
 {{ endblock }}
