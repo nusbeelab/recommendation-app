@@ -1,5 +1,6 @@
 import logging
 from typing import Iterable
+
 from binary_choice_game import C
 from binary_choice_game.utils import get_response
 from binary_choice_game.models import Player, Subsession, Trial
@@ -81,7 +82,7 @@ def get_data_export_row(player: Player, trial: Trial):
             [
                 player.session.code,
                 player.participant.code,
-                player.participant.treatment,
+                player.participant.vars.get("treatment"),  # nullable
                 trial.problem_id,
             ]
             + list(params_from_df)

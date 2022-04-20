@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 
 from recommendation_data_toolbox.lottery import Lottery
 
@@ -16,14 +17,10 @@ def is_finished(player: Player):
 
 
 def unpack_lottery(lot: Lottery):
-    # sort by descending order
-    order = lot.objective_consequences.argsort()[::-1]
-    ocs = lot.objective_consequences[order]
-    probs = lot.probs[order]
     return [
         # convert int and float to str to ensure that the data can be serialized
         dict(oc=str(oc), p=str(prob))
-        for oc, prob in zip(ocs, probs)
+        for oc, prob in zip(lot.objective_consequences, lot.probs)
     ]
 
 

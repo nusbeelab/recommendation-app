@@ -18,7 +18,26 @@
 </style>
 {{ endblock }}
 
+{{ block title }}
+Hypothetical Question {{ player.round_number }}
+{{ endblock }}
+
+
 {{ block content }}
+
+{{ if is_NoR }}
+<p>SUPPOSE there are 10 new decisions to make. These 10 questions are all taken from the 60 questions in Part 1. The
+  system is able to recommend one of the two options to you using an algorithm. There are two ways you can make your
+  decisions.</p>
+
+<ul>
+  <li>Follow your own decisions in Part 1. That is, the system will implement your decisions in Part 1 for these 10
+    questions.</li>
+  <li>Follow the recommended decisions of the system. That is, the system will generate recommendation, and implement
+    the
+    recommendations as your choices for these 10 questions.</li>
+</ul>
+{{ else }}
 <p>SUPPOSE there are 10 new decisions to make. These 10 questions are all taken from the 60 questions in Part 1.
   There
   are two ways you can make your decisions.</p>
@@ -29,8 +48,9 @@
     and
     implement the recommendations as your choices for these 10 questions.</li>
 </ul>
+{{ endif }}
 
-<p>Please choose between these two options.</p>
+<p><b>Please choose between these two options.</b></p>
 <div id="content">
   <div class=" qn-container">
     <div class="options">

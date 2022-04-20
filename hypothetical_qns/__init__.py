@@ -36,6 +36,14 @@ class Player(BasePlayer):
 
 class Qn1(Page):
     @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            is_NoR=player.participant.treatment == "NoR"
+            if "treatment" in player.participant.vars
+            else player.session.config.get("is_NoR")
+        )
+
+    @staticmethod
     def is_displayed(player: Player):
         return player.round_number == player.participant.qn_rounds["1"]
 
@@ -52,6 +60,14 @@ class Qn1(Page):
 
 
 class Qn2(Page):
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            is_NoR=player.participant.treatment == "NoR"
+            if "treatment" in player.participant.vars
+            else player.session.config.get("is_NoR")
+        )
+
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == player.participant.qn_rounds["2"]

@@ -19,6 +19,23 @@
 {{ endblock }}
 
 {{ block content }}
+
+{{ block title }}
+Hypothetical Question {{ player.round_number }}
+{{ endblock }}
+
+{{ if is_NoR }}
+<p>SUPPOSE there are 10 new decisions to make. The system is able to recommend one of the two options to you using an
+  algorithm. There are two ways that you can make your decisions.</p>
+<ul>
+  <li>Make your own decisions without recommendations. That is, you will make each decision by yourself without
+    receiving
+    any recommendations.</li>
+  <li>Completely follow the recommended decisions of the system. That is, the system will generate recommendation, and
+    you
+    will follow all the recommendations for these 10 decisions.</li>
+</ul>
+{{ else }}
 <p>SUPPOSE there are 10 new decisions to make. There are two ways that you can make your decisions.</p>
 <ul>
   <li>Make your own decisions without recommendations. That is, you will make each decision by yourself without
@@ -28,8 +45,9 @@
     in
     Part 2, and you will follow all the recommendations for these 10 decisions.</li>
 </ul>
+{{ endif }}
 
-<p>Please choose between these two options.</p>
+<p><b>Please choose between these two options.</b></p>
 <div id="content">
   <div class="qn-container">
     <div class="options">
