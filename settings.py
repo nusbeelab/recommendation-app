@@ -3,20 +3,54 @@ from os import environ
 QUESTIONS_CSV_FILE = "parameters_2Apr2022.csv"
 PREFERENCE_ELICITATION_CSV_FILE = "preference_elicitation_220403.csv"
 
+EXPERIMENT_APP_SEQ = [
+    "intro",
+    "binary_choice_game",
+    "hypothetical_qns",
+    "questionnaire",
+    "empty_app",
+]
+
 SESSION_CONFIGS = [
     dict(
         name="experiment",
         display_name="Experiment",
-        app_sequence=[
-            "intro",
-            "binary_choice_game",
-            "hypothetical_qns",
-            "questionnaire",
-            "empty_app",
-        ],
+        app_sequence=EXPERIMENT_APP_SEQ,
         num_demo_participants=1,
         mode="experiment",
         treatments=["NoR", "R_Random", "R_CF", "R_CBF"],
+    ),
+    dict(
+        name="experiment_NoR",
+        display_name="Experiment, NoR",
+        app_sequence=EXPERIMENT_APP_SEQ,
+        num_demo_participants=1,
+        mode="experiment",
+        treatments=["NoR"],
+    ),
+    dict(
+        name="experiment_R_Random",
+        display_name="Experiment, R_Random",
+        app_sequence=EXPERIMENT_APP_SEQ,
+        num_demo_participants=1,
+        mode="experiment",
+        treatments=["R_Random"],
+    ),
+    dict(
+        name="experiment_R_CF",
+        display_name="Experiment, R_CF",
+        app_sequence=EXPERIMENT_APP_SEQ,
+        num_demo_participants=1,
+        mode="experiment",
+        treatments=["R_CF"],
+    ),
+    dict(
+        name="experiment_R_CBF",
+        display_name="Experiment, R_CBF",
+        app_sequence=EXPERIMENT_APP_SEQ,
+        num_demo_participants=1,
+        mode="experiment",
+        treatments=["R_CBF"],
     ),
     dict(
         name="game_NoR",
@@ -59,10 +93,18 @@ SESSION_CONFIGS = [
         treatments=["R_CBF"],
     ),
     dict(
-        name="hypothetical_qns",
-        display_name="Hypothetical questions",
+        name="hypo_qns_NoR",
+        display_name="Hypothetical questions, no recommendations",
         app_sequence=["hypothetical_qns"],
         num_demo_participants=1,
+        is_NoR=True,
+    ),
+    dict(
+        name="hypo_qns_R",
+        display_name="Hypothetical questions, with recommendations",
+        app_sequence=["hypothetical_qns"],
+        num_demo_participants=1,
+        is_NoR=False,
     ),
     dict(
         name="preexperiment",

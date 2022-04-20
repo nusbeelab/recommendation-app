@@ -93,7 +93,7 @@ def populate_rec_probas(player: Player):
         trials = Trial.filter(player=player)
         for problem_id, rec_proba in zip(problem_ids, rec_probas):
             trial = next(trial for trial in trials if trial.problem_id == problem_id)
-            trial.rec_proba = rec_proba
+            trial.rec_proba = None if np.isnan(rec_proba) else rec_proba
     except Exception as err:
         logger.error(err)
         raise err
