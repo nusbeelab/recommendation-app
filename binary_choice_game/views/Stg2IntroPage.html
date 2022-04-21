@@ -2,10 +2,10 @@
 {% load otree %}
 
 {{ block content }}
-{{ if player.participant.treatment == "NoR" }}
+{{ if participant.treatment == "NoR" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
-{{ elif player.participant.treatment == "R_Random" }}
+{{ elif participant.treatment == "R_Random" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
 <p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
@@ -15,7 +15,7 @@
   </li>
   <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
 </ul>
-{{ elif player.participant.treatment == "R_Maj" }}
+{{ elif participant.treatment == "R_Maj" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
 <p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
@@ -31,7 +31,7 @@
     you.</li>
   <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
 </ul>
-{{ elif player.participant.treatment == "R_CF" }}
+{{ elif participant.treatment == "R_CF" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
 <p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
@@ -49,7 +49,7 @@
     in this question.</li>
   <li>It is entirely up to you whether you want to follow or not to follow the recommendation for each question.</li>
 </ul>
-{{ elif player.participant.treatment == "R_CBF" }}
+{{ elif participant.treatment == "R_CBF" }}
 <p>In Part 2, there are 60 questions. Similar to Part 1, you will be asked to choose between two options in each
   question.</p>
 <p>The difference in Part 2 is that <b>you will receive a recommendation in each question</b>.</p>
@@ -64,7 +64,7 @@
 </ul>
 {{ endif }}
 
-{{ if player.participant.treatment != "NoR" }}
+{{ if participant.treatment != "NoR" }}
 <p>Here is an example:</p>
 
 <div class="qn-container">

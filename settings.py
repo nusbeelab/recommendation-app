@@ -18,7 +18,7 @@ SESSION_CONFIGS = [
         app_sequence=EXPERIMENT_APP_SEQ,
         num_demo_participants=1,
         mode="experiment",
-        treatments=["NoR", "R_Random", "R_CF", "R_CBF"],
+        treatments=["NoR", "R_Random", "R_Maj", "R_CF", "R_CBF"],
     ),
     dict(
         name="experiment_NoR",
@@ -35,6 +35,14 @@ SESSION_CONFIGS = [
         num_demo_participants=1,
         mode="experiment",
         treatments=["R_Random"],
+    ),
+    dict(
+        name="experiment_R_Maj",
+        display_name="Experiment, R_Maj",
+        app_sequence=EXPERIMENT_APP_SEQ,
+        num_demo_participants=1,
+        mode="experiment",
+        treatments=["R_Maj"],
     ),
     dict(
         name="experiment_R_CF",

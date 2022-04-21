@@ -5,13 +5,13 @@
 {{ if player.is_stg3_rec }}
 <p>Your realized choice is Recommendation, ${{ player.stg3_payment }}.</p>
 <p>In Part 3, you will receive a recommendation for each question. The recommendation is generated
-  {{ if player.participant.treatment == "R_Random" }}
+  {{ if participant.treatment == "R_Random" }}
   randomly
-  {{ elif player.participant.treatment == "R_Maj" }}
+  {{ elif participant.treatment == "R_Maj" }}
   based on the most popular choices in a previous study
-  {{ elif player.participant.treatment == "R_CF" }}
+  {{ elif participant.treatment == "R_CF" }}
   based on decisions from participants who are similar to you
-  {{ elif player.participant.treatment == "R_CBF" }}
+  {{ elif participant.treatment == "R_CBF" }}
   based on how you made your decisions in Part 1
   {{ endif }}
   as in Part 2.
