@@ -4,6 +4,7 @@ from typing import Callable, Dict, List, Type
 from otree.api import Bot, Submission, expect, Page
 
 from binary_choice_game.constants import C
+from binary_choice_game.controller.end_page import EndPage
 from binary_choice_game.controller.pref_elicit_page import PrefElicitPage
 from binary_choice_game.controller.stg3_intro_page1 import Stg3IntroPage1
 from binary_choice_game.controller.realized_pref_page import RealizedPrefPage
@@ -129,3 +130,6 @@ class PlayerBot(Bot):
             for trial in trials
         ]
         expect(recorded_input_data, MOCK_INPUT_DATA_BY_STAGE[self.round_number])
+
+        if self.round_number == 3:
+            yield EndPage

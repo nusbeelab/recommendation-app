@@ -115,6 +115,13 @@ SESSION_CONFIGS = [
         is_NoR=False,
     ),
     dict(
+        name="experiment_questionnaire",
+        display_name="Experiment Questionnaire",
+        app_sequence=["questionnaire"],
+        mode="experiment",
+        num_demo_participants=1,
+    ),
+    dict(
         name="preexperiment",
         display_name="Pre-experiment",
         app_sequence=[
