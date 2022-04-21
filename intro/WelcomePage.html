@@ -30,7 +30,9 @@
 
 <p><b>Payment</b></p>
 <p>You will receive a $3.5 participation fee after you finish the entire study.</p>
-<p>You may receive an additional payment of up to $19.9, depending partly on the decisions you make and partly on
+<p>You may receive an additional payment of up to ${{ if session.config.get("mode") == "experiment" }}21.1{{ else
+  }}19.9{{ endif }},
+  depending partly on the decisions you make and partly on
   chance. The transfer of the additional payment will take up a week.</p>
 <p>All payments and procedures will be implemented in exactly the manner described in this experiment and on the
   Prolific platform.</p>

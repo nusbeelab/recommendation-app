@@ -20,14 +20,14 @@
 
   <input type="radio" id="choice1" name="ut4">
   <label for="choice1">
-    {{ if player.participant.treatment == "R_Random" }}
+    {{ if participant.treatment == "R_Random" }}
     The recommendation is generated randomly.
-    {{ elif player.participant.treatment == "R_Maj" }}
+    {{ elif participant.treatment == "R_Maj" }}
     The recommendation is based on the most popular choices in a previous study.
-    {{ elif player.participant.treatment == "R_CF" }}
-    The recommendation is based on decisions from participants who are similar to you.
-    {{ elif player.participant.treatment == "R_CBF" }}
-    The recommendation is based on how you made your decisions in Part 1.
+    {{ elif participant.treatment == "R_CF" }}
+    The recommendation is based on decisions from participants who are similar to me.
+    {{ elif participant.treatment == "R_CBF" }}
+    The recommendation is based on how I made my decisions in Part 1.
     {{ endif }}
   </label><br>
 
