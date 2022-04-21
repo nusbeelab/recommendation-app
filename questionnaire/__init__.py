@@ -70,11 +70,13 @@ AI_AWARENESS_CHOICES = [
     "Moderately aware",
     "Extremely aware",
 ]
-AI_OPINION_CHOICES = [
+OPINION_CHOICES = [
     "Extremely harmful",
+    "Harmful",
     "Slightly harmful",
     "Neutral",
     "Slightly helpful",
+    "Helpful",
     "Extremely helpful",
 ]
 
@@ -120,8 +122,12 @@ class Player(BasePlayer):
     ai_awareness = models.StringField(
         choices=AI_AWARENESS_CHOICES, widget=widgets.RadioSelect
     )
-    ai_opinion = models.StringField(
-        choices=AI_OPINION_CHOICES, widget=widgets.RadioSelect
+    ai_opinion = models.StringField(choices=OPINION_CHOICES, widget=widgets.RadioSelect)
+    prod_rec_opinion = models.StringField(
+        choices=OPINION_CHOICES, widget=widgets.RadioSelect
+    )
+    article_rec_opinion = models.StringField(
+        choices=OPINION_CHOICES, widget=widgets.RadioSelect
     )
 
 
@@ -291,6 +297,38 @@ class AiOpinion(Page):
         )
 
 
+def is_experiment_mode(player: Player):
+    return player.session.config.get("mode") == "experiment"
+
+
+class ProdRecOpinion(Page):
+    form_model = "player"
+    form_fields = ["prod_rec_opinion"]
+
+    is_displayed = is_experiment_mode
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s opinion of product recommendation: {player.prod_rec_opinion}."
+        )
+
+
+class ArticleRecOpinion(Page):
+    form_model = "player"
+    form_fields = ["article_rec_opinion"]
+
+    is_displayed = is_experiment_mode
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        logger = logging.getLogger(__name__)
+        logger.info(
+            f"Participant {player.participant.code}'s opinion of article recommendation: {player.article_rec_opinion}."
+        )
+
+
 class Finish(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -315,5 +353,7 @@ page_sequence = [
     Religion,
     AiAwareness,
     AiOpinion,
+    ProdRecOpinion,
+    ArticleRecOpinion,
     Finish,
 ]

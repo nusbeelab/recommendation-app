@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>Generally, is article recommendation helpful or harmful for your online news reading?</p>
+{{ form.article_rec_opinion }}
+{{ formfield_errors 'article_rec_opinion' }}
+{{ next_button }}
+{{ endblock }}

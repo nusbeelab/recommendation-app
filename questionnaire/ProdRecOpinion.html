@@ -1,0 +1,9 @@
+{% extends "global/Mcq.html" %}
+{% load otree %}
+
+{{ block content }}
+<p>Generally, is product recommendation helpful or harmful for your online shopping?</p>
+{{ form.prod_rec_opinion }}
+{{ formfield_errors 'prod_rec_opinion' }}
+{{ next_button }}
+{{ endblock }}

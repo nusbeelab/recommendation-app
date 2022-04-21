@@ -10,7 +10,7 @@ class C(BaseConstants):
     NAME_IN_URL = "hypothetical_qns"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 2
-    qns = ["1", "2"]
+    qns = [1, 2]
 
 
 class Subsession(BaseSubsession):
@@ -45,7 +45,7 @@ class Qn1(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.round_number == player.participant.qn_rounds["1"]
+        return player.round_number == player.participant.qn_rounds[1]
 
     @staticmethod
     def live_method(player: Player, data: dict):
@@ -70,7 +70,7 @@ class Qn2(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.round_number == player.participant.qn_rounds["2"]
+        return player.round_number == player.participant.qn_rounds[2]
 
     @staticmethod
     def live_method(player: Player, data: dict):
