@@ -1,4 +1,3 @@
-import json
 import os
 import pandas as pd
 
@@ -8,8 +7,9 @@ from otree.api import BaseConstants
 
 from recommendation_data_toolbox.lottery import get_problem_manager
 
-from binary_choice_game.utils import get_response
-from settings import PREFERENCE_ELICITATION_CSV_FILE, QUESTIONS_CSV_FILE
+
+QUESTIONS_CSV_FILE = "parameters_2Apr2022.csv"
+PREFERENCE_ELICITATION_CSV_FILE = "preference_elicitation_220403.csv"
 
 resources_filepath = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -57,6 +57,7 @@ class C(BaseConstants):
     NAME_IN_URL = "gamble"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 3
+    TREATMENT_BLOCK_SIZE = 10
     QUESTIONS_DF_BY_STAGE = read_qns_by_stage()
     PROBLEM_MANAGER = get_problem_manager(pd.concat(QUESTIONS_DF_BY_STAGE.values()))
     NUM_TRIALS_BY_STAGE = get_num_trials_by_stage(QUESTIONS_DF_BY_STAGE)

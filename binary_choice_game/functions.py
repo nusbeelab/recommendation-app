@@ -1,5 +1,7 @@
+from itertools import permutations
 import logging
-from typing import Iterable
+import random
+from typing import Iterable, List
 
 from binary_choice_game import C
 from binary_choice_game.utils import get_response
@@ -43,13 +45,42 @@ def generate_random_problem_id_list(stage: int):
     return C.QUESTIONS_DF_BY_STAGE[stage]["id"].sample(frac=1).to_list()
 
 
+def treatment_assignment(treatments: List[str], treatment_block_size: int):
+    if treatment_block_size % len(treatments) != 0:
+        raise ValueError(
+            f"The block size ({treatment_block_size}) is not a multiple of the number of treatments ({len(treatments)})"
+        )
+    sample_treatment_block = treatments * (treatment_block_size // len(treatments))
+    treatment_blocks = list(permutations(sample_treatment_block))
+
+    cur_treatment_block = None
+    cur_idx = len(treatment_blocks)
+
+    while True:
+        if cur_idx >= treatment_block_size:
+            cur_treatment_block = random.choice(treatment_blocks)
+            cur_idx = 0
+        yield cur_treatment_block[cur_idx]
+        cur_idx += 1
+
+
 def creating_session(subsession: Subsession):
+    logger = logging.getLogger(__name__)
     try:
+        treatments = subsession.session.config.get("treatments")
+        treatment_gen = treatment_assignment(treatments, C.TREATMENT_BLOCK_SIZE)
         for player in subsession.get_players():
+            if subsession.round_number == 1:
+                player.participant.treatment = next(treatment_gen)
+                logger.info(
+                    f"Participant {player.participant.code} is assigned treatment {player.participant.treatment}"
+                )
+
             for id in generate_random_problem_id_list(player.round_number):
                 Trial.create(player=player, problem_id=id, left_option=get_rand_bool())
+
     except Exception as err:
-        logging.getLogger(__name__).error(err)
+        logger.error(err)
 
 
 def get_data_export_row(player: Player, trial: Trial):
