@@ -1,8 +1,5 @@
 from os import environ
 
-QUESTIONS_CSV_FILE = "parameters_2Apr2022.csv"
-PREFERENCE_ELICITATION_CSV_FILE = "preference_elicitation_220403.csv"
-
 EXPERIMENT_APP_SEQ = [
     "intro",
     "binary_choice_game",

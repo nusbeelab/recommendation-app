@@ -66,6 +66,10 @@ class PlayerBot(Bot):
     cases = ["stg3_rec", "stg3_noRec"]
 
     def play_round(self):
+        # participant is assigned a valid treatment at the start
+        initial_treatment = self.participant.treatment
+        expect(initial_treatment, "in", self.session.config.get("treatments"))
+
         # text for each round is displayed correctly in html
         if self.round_number == 1:
             expect(
@@ -75,10 +79,6 @@ class PlayerBot(Bot):
             )
             expect("Now you can start Part 1.", "in", self.html)
         elif self.round_number == 2:
-            # participant is assigned a valid treatment
-            treatments = self.session.config.get("treatments")
-            expect(self.player.participant.treatment, "in", treatments)
-
             expect("You have finished Part 1.", "in", self.html)
             expect("Please wait for Part 2 to start.", "in", self.html)
         elif self.round_number == 3:
@@ -88,6 +88,8 @@ class PlayerBot(Bot):
             raise Exception("There should only be three rounds.")
 
         yield StartPage
+        # the treatment stays the same at the start of each round
+        expect(initial_treatment, initial_treatment)
         if self.session.config.get("mode") == "experiment":
             if self.round_number == 2:
                 yield Stg2IntroPage
